@@ -1,7 +1,8 @@
     This sections stores bunch of useful functions to remind your self when and what can be used
     
     
-    
+///   
+
     Working with timed functions
     //time object
     private ElapsedTime runtime = new ElapsedTime();
@@ -14,6 +15,7 @@
     
     
 
+///
 
     Using FTCDashboard Unofficial for visual data
     //setup dashboard objects
@@ -25,6 +27,7 @@
 
 
 
+///
 
     Using FTCDashboard Unofficial for direct control over the code
     //creat class with @Config
@@ -35,12 +38,16 @@
     }
 
 
+///
 
     Periodic Functionj call, useful to call function periodic in any class that extends periodicm at specific rate
     //Create object of periodic of specified class
-    PeriodicScheduler.register(driveTrain); //this is inside main in "int"
+    PeriodicScheduler.register(driveTrain); //this is inside main in "int" for subsystems, and if you need periodic of "subsystem" 
+    of a subsystem, just place this into subsystem int
     //runs in the loop
     PeriodicScheduler.runPeriodically();//updates periodic class
     
     to add periodic function to specific class add this extends Periodic
-    in the contructor add super(5000, 0);  // Run every 1000ms (1 second), no offset
+    in the contructor add super(1000, 0);  // Run every 1000ms (1 second), no offset
+    at the end of teh class creat function    @Override
+    public void periodic() here you can put all of your code you wan periodicaly to run

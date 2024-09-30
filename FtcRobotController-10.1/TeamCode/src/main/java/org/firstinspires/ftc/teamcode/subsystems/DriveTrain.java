@@ -21,6 +21,11 @@ public class DriveTrain  extends Periodic{
         motor_2 = new DriveTrainSubsystem(hardwareMap, Constants.DriveTrainSubsystemsConstants.Motor2);
         motor_3 = new DriveTrainSubsystem(hardwareMap, Constants.DriveTrainSubsystemsConstants.Motor3);
         motor_4 = new DriveTrainSubsystem(hardwareMap, Constants.DriveTrainSubsystemsConstants.Motor4);
+        //setup periodic for motors
+        PeriodicScheduler.register(motor_1);
+        PeriodicScheduler.register(motor_2);
+        PeriodicScheduler.register(motor_3);
+        PeriodicScheduler.register(motor_4);
     }
 
 
@@ -69,13 +74,13 @@ public class DriveTrain  extends Periodic{
                     motor_1.set(RawPower);
                     break;
                 case 2:
-                    motor_1.set(RawPower);
+                    motor_2.set(RawPower);
                     break;
                 case 3:
-                    motor_1.set(RawPower);
+                    motor_3.set(RawPower);
                     break;
                 case 4:
-                    motor_1.set(RawPower);
+                    motor_4.set(RawPower);
                     break;
                 default:
            }
