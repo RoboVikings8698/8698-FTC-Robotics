@@ -7,17 +7,19 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-public class DriveTrainSubsystem extends Periodic{
+public class Motors extends Periodic{
 
     //create motor instances
     private Motor m_motor;
     private DcMotor motor;
     private Motor.Encoder encoder;
+    private Controllers PID;
+    public Controllers.PositionPID posPID;
     FtcDashboard dashboard = FtcDashboard.getInstance();
     Telemetry dashboardTelemetry = dashboard.getTelemetry();
 
     //variables
-    private int currentPosition;
+    private int oldPos;
 
 
 
@@ -25,9 +27,13 @@ public class DriveTrainSubsystem extends Periodic{
 
 
     //constructor
-    DriveTrainSubsystem(HardwareMap hardwareMap, String MotNam){
-        //set periodic rate
-        super(10, 0);
+    Motors(HardwareMap hardwareMap, String MotNam){
+        //set periodic rate, 10ms
+        super((long)Constants.Motors.cycleRate, 0);
+        //PID stuff, skip it
+        PID = new Controllers();
+        posPID = PID.new PositionPID(Constants.Motors.Kp, Constants.Motors.Ki, Constants.Motors.Kd, Constants.Motors.KiClamp, Constants.Motors.KOutClamp, Constants.Motors.KOutRateClamp);
+
 
 
         //motor mapping, and initialization
@@ -41,11 +47,13 @@ public class DriveTrainSubsystem extends Periodic{
         m_motor.setRunMode(Motor.RunMode.RawPower);
 
         //sets the motor standby mode, (break, cost)
-        if (Constants.DriveTrainSubsystemsConstants.StandbyMode == 1) {
+        if (Constants.Motors.StandbyMode == 1) {
             m_motor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         }else{
             m_motor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
         }
+
+
         //reset encoder before it being used, good habit.
         m_motor.resetEncoder();
     }
@@ -54,29 +62,36 @@ public class DriveTrainSubsystem extends Periodic{
 
 
     //motor Functions
-    public void set(double RawPower){
-        m_motor.set(RawPower);
-    }
+    public void set(double RawPower){m_motor.set(RawPower);}
 
     //get motorPosition
-    public int getPosition(){
-        return currentPosition;
-    }
+    public int getPosition(){return encoder.getPosition();}
 
+    //get motor velocity
+    public double getVelocity(){return encoder.getCorrectedVelocity();};
 
-
-    //Internal functions
-    public void updatePos()
+    //PID controled
+    public void setPosition(double setpoint)
     {
-        currentPosition = encoder.getPosition();
+        posPID.setNewPoint(setpoint);
     }
+
+
 
 
 
     @Override
     public void periodic() {
         //updating stuff
-        updatePos();
+        posPID.calculatePID(getPosition());
+        set(posPID.getPidOut());
+
+        // Code that will run periodically
+        dashboardTelemetry.addData("Position", getPosition()); // add date to dashboard, name, value
+        dashboardTelemetry.addData("PID Out", posPID.getPidOut()); //pid out put
+        dashboardTelemetry.addData("SetPoint", posPID.setpoint); //pid out put
+
+        dashboardTelemetry.update(); //updates dashboard
     }
 
 }

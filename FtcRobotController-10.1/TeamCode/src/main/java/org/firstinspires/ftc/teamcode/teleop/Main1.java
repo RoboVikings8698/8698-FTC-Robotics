@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.subsystems.Dashboard;
 import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
-import org.firstinspires.ftc.teamcode.subsystems.DriveTrainSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.PeriodicScheduler;
 
 @TeleOp
@@ -41,8 +40,12 @@ public class Main1 extends OpMode {
     @Override
     public void loop() {
         PeriodicScheduler.runPeriodically();
+
+
+
         //DEV TOOLS
-        driveTrain.DirectMotorControl(Dashboard.DriveTrain.motorNum,Dashboard.DriveTrain.motor_RawPower );
+        driveTrain.DirectMotorControl(Dashboard.DriveTrain.motorNum, Dashboard.DriveTrain.motor_RawPower, Dashboard.DriveTrain.Kp, Dashboard.DriveTrain.Ki, Dashboard.DriveTrain.Kd, Dashboard.DriveTrain.KiClamp, Dashboard.DriveTrain.KOutClamp, Dashboard.DriveTrain.KOutRateClamp, Dashboard.DriveTrain.SetPoint);
+
     }
 
     //Once stop is pressed run this once

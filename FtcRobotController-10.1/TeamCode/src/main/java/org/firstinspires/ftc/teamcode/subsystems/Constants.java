@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 public final class Constants {
-    public static final class DriveTrainSubsystemsConstants {
+    public static final class Motors {
         //motor mapping constants
         public static final String Motor1 = "motor1"; //SPECIFY MOTOR LOCATION
         public static final String Motor2 = "motor2"; //SPECIFY MOTOR LOCATION
@@ -13,7 +13,19 @@ public final class Constants {
 
         //Driving Mode, true for field oriented control
         public static final boolean DriveMode = true;
+
+        //PID STUFF
+        public static double Kp = 0;
+        public static double Ki = 0;
+        public static double Kd = 0;
+        public static double KiClamp = 0;
+        public static double KOutClamp = 0;
+        public static double KOutRateClamp = 0;
+        public static double cycleRate = 10;
+
     }
+
+
 
 
 }

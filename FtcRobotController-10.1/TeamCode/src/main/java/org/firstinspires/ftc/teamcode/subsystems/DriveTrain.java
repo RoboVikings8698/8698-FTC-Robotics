@@ -7,7 +7,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class DriveTrain  extends Periodic{
 
-    private DriveTrainSubsystem motor_1, motor_2, motor_3, motor_4;
+    private Motors motor_1, motor_2, motor_3, motor_4;
     private int i = 0;
 
     FtcDashboard dashboard = FtcDashboard.getInstance();
@@ -17,15 +17,15 @@ public class DriveTrain  extends Periodic{
     public DriveTrain(HardwareMap hardwareMap){
         super(5000, 0);  // Run every 1000ms (1 second), no offset
         //create motor objects and hardwareMap them
-        motor_1 = new DriveTrainSubsystem(hardwareMap, Constants.DriveTrainSubsystemsConstants.Motor1);
-        motor_2 = new DriveTrainSubsystem(hardwareMap, Constants.DriveTrainSubsystemsConstants.Motor2);
-        motor_3 = new DriveTrainSubsystem(hardwareMap, Constants.DriveTrainSubsystemsConstants.Motor3);
-        motor_4 = new DriveTrainSubsystem(hardwareMap, Constants.DriveTrainSubsystemsConstants.Motor4);
+        motor_1 = new Motors(hardwareMap, Constants.Motors.Motor1);
+        motor_2 = new Motors(hardwareMap, Constants.Motors.Motor2);
+        motor_3 = new Motors(hardwareMap, Constants.Motors.Motor3);
+        motor_4 = new Motors(hardwareMap, Constants.Motors.Motor4);
         //setup periodic for motors
         PeriodicScheduler.register(motor_1);
-        PeriodicScheduler.register(motor_2);
-        PeriodicScheduler.register(motor_3);
-        PeriodicScheduler.register(motor_4);
+        //PeriodicScheduler.register(motor_2);
+        //PeriodicScheduler.register(motor_3);
+        //PeriodicScheduler.register(motor_4);
     }
 
 
@@ -67,20 +67,28 @@ public class DriveTrain  extends Periodic{
 
     /*_DEV TOOLS__________________________________________________________________________________________*/
     // Direct motor control
-    public void DirectMotorControl(int motNum, double RawPower)
+    public void DirectMotorControl(int motNum, double RawPower, double Kp, double Ki, double Kd, double KiClamp, double KClamp, double KClampOutRate, double setpoint)
     {
            switch(motNum) {
                 case 1:
-                    motor_1.set(RawPower);
+                    //motor_1.set(RawPower);
+                    motor_1.posPID.setPIDparams(Kp,Ki,Kd,KiClamp,KClamp,KClampOutRate);
+                    motor_1.setPosition(setpoint);
                     break;
                 case 2:
-                    motor_2.set(RawPower);
+                    //motor_1.set(RawPower);
+                    motor_2.posPID.setPIDparams(Kp,Ki,Kd,KiClamp,KClamp,KClampOutRate);
+                    motor_1.setPosition(setpoint);
                     break;
                 case 3:
-                    motor_3.set(RawPower);
+                    //motor_1.set(RawPower);
+                    motor_3.posPID.setPIDparams(Kp,Ki,Kd,KiClamp,KClamp,KClampOutRate);
+                    motor_1.setPosition(setpoint);
                     break;
                 case 4:
-                    motor_4.set(RawPower);
+                    //motor_1.set(RawPower);
+                    motor_4.posPID.setPIDparams(Kp,Ki,Kd,KiClamp,KClamp,KClampOutRate);
+                    motor_1.setPosition(setpoint);
                     break;
                 default:
            }
@@ -90,11 +98,6 @@ public class DriveTrain  extends Periodic{
 
     @Override
     public void periodic() {
-
-        // Code that will run periodically
-        dashboardTelemetry.addData("runtime", 1+i); // add date to dashboard, name, value
-        dashboardTelemetry.update(); //updates dashboard
-        i++;
     }
 
 
