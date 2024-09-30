@@ -18,13 +18,6 @@ public class Motors extends Periodic{
     FtcDashboard dashboard = FtcDashboard.getInstance();
     Telemetry dashboardTelemetry = dashboard.getTelemetry();
 
-    //variables
-    private int oldPos;
-
-
-
-
-
 
     //constructor
     Motors(HardwareMap hardwareMap, String MotNam){
@@ -70,7 +63,7 @@ public class Motors extends Periodic{
     //get motor velocity
     public double getVelocity(){return encoder.getCorrectedVelocity();};
 
-    //PID controled
+    //PID controlled
     public void setPosition(double setpoint)
     {
         posPID.setNewPoint(setpoint);
@@ -85,13 +78,6 @@ public class Motors extends Periodic{
         //updating stuff
         posPID.calculatePID(getPosition());
         set(posPID.getPidOut());
-
-        // Code that will run periodically
-        dashboardTelemetry.addData("Position", getPosition()); // add date to dashboard, name, value
-        dashboardTelemetry.addData("PID Out", posPID.getPidOut()); //pid out put
-        dashboardTelemetry.addData("SetPoint", posPID.setpoint); //pid out put
-
-        dashboardTelemetry.update(); //updates dashboard
     }
 
 }

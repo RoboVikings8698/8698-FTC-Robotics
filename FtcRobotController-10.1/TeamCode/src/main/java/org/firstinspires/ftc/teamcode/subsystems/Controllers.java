@@ -56,10 +56,10 @@ public class Controllers {
             accumulatedError = Functions.Clamp(accumulatedError, -kiClamp, kiClamp);
             double delta_error = error - oldError;
 
-            pidOut = Kp * error + Ki * accumulatedError + Kd * delta_error; //main pid math
+            pidOut = -Kp * error + -Ki * accumulatedError + -Kd * delta_error; //main pid math
             pidOut = Functions.Clamp(pidOut, -kClampOut, kClampOut); //final result is clamped, which is basically velocity limit, voltage and speed are proportional
             if (kClampOutRate > 0) {
-                pidOut = Functions.Clamp(oldPidOut - pidOut, -kClampOutRate, kClampOutRate);
+                pidOut = Functions.Clamp(-oldPidOut + pidOut, -kClampOutRate, kClampOutRate);
             }//limits acceleration, if specified
             oldPidOut = pidOut; //update var for next cycle
             oldError = error; //update var for next cycle

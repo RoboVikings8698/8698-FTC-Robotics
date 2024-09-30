@@ -15,11 +15,11 @@ public final class Constants {
         public static final boolean DriveMode = true;
 
         //PID STUFF
-        public static double Kp = 0;
+        public static double Kp = 0.009;
         public static double Ki = 0;
-        public static double Kd = 0;
+        public static double Kd = 0.01;
         public static double KiClamp = 0;
-        public static double KOutClamp = 0;
+        public static double KOutClamp = 1;
         public static double KOutRateClamp = 0;
         public static double cycleRate = 10;
 

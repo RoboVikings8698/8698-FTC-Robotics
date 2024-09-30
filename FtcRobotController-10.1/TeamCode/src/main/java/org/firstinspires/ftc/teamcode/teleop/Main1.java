@@ -44,7 +44,7 @@ public class Main1 extends OpMode {
 
 
         //DEV TOOLS
-        driveTrain.DirectMotorControl(Dashboard.DriveTrain.motorNum, Dashboard.DriveTrain.motor_RawPower, Dashboard.DriveTrain.Kp, Dashboard.DriveTrain.Ki, Dashboard.DriveTrain.Kd, Dashboard.DriveTrain.KiClamp, Dashboard.DriveTrain.KOutClamp, Dashboard.DriveTrain.KOutRateClamp, Dashboard.DriveTrain.SetPoint);
+        driveTrain.DirectMotorControl(Dashboard.Motors.motorNum, Dashboard.Motors.motor_RawPower, Dashboard.Motors.Kp, Dashboard.Motors.Ki, Dashboard.Motors.Kd, Dashboard.Motors.KiClamp, Dashboard.Motors.KOutClamp, Dashboard.Motors.KOutRateClamp, Dashboard.Motors.SetPoint);
 
     }
 
