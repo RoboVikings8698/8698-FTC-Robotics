@@ -9,7 +9,7 @@ public final class Constants {
         public static final String Motor4 = "motor4"; //SPECIFY MOTOR LOCATION
 
         //when motor on standby: 0 - coast, 1 - break, 2 - hold
-        public static final int StandbyMode = 1;
+        public static final int StandbyMode = 0;
 
         //Driving Mode, true for field oriented control
         public static final boolean DriveMode = true;
@@ -23,6 +23,14 @@ public final class Constants {
         public static double KOutRateClamp = 0;
         public static double cycleRate = 10;
 
+    }
+
+    public static final class DriveTrain{
+        public static final boolean motorPidTrue = false;
+    }
+
+    public static final class Controllers{
+        public static final double controllerDeadZone = 0.1;
     }
 
 

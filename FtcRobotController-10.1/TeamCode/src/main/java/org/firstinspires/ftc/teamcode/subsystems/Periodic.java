@@ -1,17 +1,17 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 public abstract class Periodic {
-    private long lastRunTime = 0;
-    private long periodMs;
-    private long offsetMs;
+    private long lastRunTime = 0; //saves last time periodic was run
+    private long periodMs;  //frequency of running
+    private long offsetMs; //offset so periodic of diff calls so not interfere
 
-    // Constructor for default period and offset
+    // Constructor for default period and offset, setup periodic
     public Periodic(long periodMs, long offsetMs) {
         this.periodMs = periodMs;
         this.offsetMs = offsetMs;
         this.lastRunTime = System.currentTimeMillis() + offsetMs;  // Apply the offset
     }
 
-    // Abstract method to be implemented by subclasses
+    // Abstract method to be implemented by subclasses, um IDK
     public abstract void periodic();
 
     // Method to determine if it's time to run the periodic method

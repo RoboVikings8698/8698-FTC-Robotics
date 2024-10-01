@@ -6,7 +6,6 @@ public class Dashboard {
 
     @Config
     public static class Motors {
-
         //variables for checking motors
         public static double motor_RawPower = 0;
         public static int motorNum = 1;
@@ -19,9 +18,6 @@ public class Dashboard {
         public static double KOutRateClamp = 0;
         public static double SetPoint = 0;
         public static double cycleRate = 10;
-
-
-
     }
 
 

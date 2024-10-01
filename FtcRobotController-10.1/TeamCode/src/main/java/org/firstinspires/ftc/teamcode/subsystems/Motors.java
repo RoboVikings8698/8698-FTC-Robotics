@@ -76,8 +76,10 @@ public class Motors extends Periodic{
     @Override
     public void periodic() {
         //updating stuff
-        posPID.calculatePID(getPosition());
-        set(posPID.getPidOut());
+        if(Constants.DriveTrain.motorPidTrue) {
+            posPID.calculatePID(getPosition());
+            set(posPID.getPidOut());
+        }
     }
 
 }

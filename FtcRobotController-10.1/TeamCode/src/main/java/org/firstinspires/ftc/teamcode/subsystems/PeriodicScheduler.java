@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PeriodicScheduler {
-    private static List<Periodic> periodicSystems = new ArrayList<>();
+    private static List<Periodic> periodicSystems = new ArrayList<>(); //stores classes that extends periodic
 
-    // Add any class that extends Periodic
+    // Add any class that extends Periodic, add them to the list
     public static void register(Periodic system) {
         periodicSystems.add(system);
     }
