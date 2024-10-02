@@ -56,7 +56,8 @@ public class Main1 extends OpMode {
         double RSX = Functions.Exponential(Functions.DeadZone(gamepadEx.getRightX(), Constants.Controllers.controllerDeadZone));
         double RSAngle = 90-Math.toDegrees(Math.atan2(RSY, RSX));
 
-        driveTrain.directDrive(LSY, LSX, RSY , RSX);
+        driveTrain.FieldDrive(LSY, LSX, RSY, RSX);
+
 
     }
 

@@ -81,6 +81,9 @@ public class Controllers {
             kClampOutRate = kclampoutrate;
         }
 
+        public void setPidOut(double kclampout){
+            kClampOut = kclampout;
+        }
 
 
         //result of pid calculation

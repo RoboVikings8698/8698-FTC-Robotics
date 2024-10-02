@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import static com.qualcomm.hardware.rev.RevHubOrientationOnRobot.xyzOrientation;
 
+import static java.lang.Math.sqrt;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -18,12 +20,19 @@ public class DriveTrain  extends Periodic{
     private IMU imu; //gyro stuff
     private RevHubOrientationOnRobot orientationOnRobot;
 
+    private Controllers PID;
+    public Controllers.PositionPID posPID;
+
     FtcDashboard dashboard = FtcDashboard.getInstance();
     Telemetry dashboardTelemetry = dashboard.getTelemetry();
 
     //constructor, called once object is created
     public DriveTrain(HardwareMap hardwareMap){
         super(5000, 0);  //
+
+        PID = new Controllers();
+        posPID = PID.new PositionPID(0, 0, 0, 0, 0);
+
         //create motor objects and hardwareMap them
         motor_1 = new Motors(hardwareMap, Constants.Motors.Motor1);
         motor_2 = new Motors(hardwareMap, Constants.Motors.Motor2);
@@ -46,6 +55,9 @@ public class DriveTrain  extends Periodic{
         PeriodicScheduler.register(motor_2);
         PeriodicScheduler.register(motor_3);
         PeriodicScheduler.register(motor_4);
+
+
+
     }
 
 
@@ -63,6 +75,17 @@ public class DriveTrain  extends Periodic{
         motor_4.set(joystick1+joystick2-joystick4);
     }
 
+
+    public void FieldDrive(double vecyL, double vecxL, double vecyR, double vecxR) {
+        double RSAngle = 90-Math.toDegrees(Math.atan2(vecyR,vecxR));
+        double rcomp = posPID.getPidOut();
+        posPID.setNewPoint(RSAngle);
+
+        posPID.setPidOut(Math.abs(sqrt((vecyR * vecyR) + (vecxR * vecxR))),
+        motor_2.set(vecyL - vecxL + rcomp);
+        motor_3.set(vecyL - vecxL - rcomp);
+        motor_4.set(vecyL + vecxL + rcomp);
+    }
 
 
     //getting robot yaw.
@@ -88,6 +111,8 @@ public class DriveTrain  extends Periodic{
 
     @Override
     public void periodic() {
+        posPID.calculatePID(getYaw());
+
     }
 
 
