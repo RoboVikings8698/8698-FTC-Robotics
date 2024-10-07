@@ -53,7 +53,6 @@ public class Main1 extends OpMode {
         double LSX = Functions.Exponential(Functions.DeadZone(gamepadEx.getLeftX(), Constants.Controllers.controllerDeadZone)); //gets each controller's inputs
         double RSY = -Functions.Exponential(Functions.DeadZone(gamepadEx.getRightY(), Constants.Controllers.controllerDeadZone));
         double RSX = Functions.Exponential(Functions.DeadZone(gamepadEx.getRightX(), Constants.Controllers.controllerDeadZone));
-        double RSAngle = 90-Math.toDegrees(Math.atan2(RSY, RSX));
 
 
         driveTrain.FieldOrientDrive(LSY, LSX, RSY, RSX);

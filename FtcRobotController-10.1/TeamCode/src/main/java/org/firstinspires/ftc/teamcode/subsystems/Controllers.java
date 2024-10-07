@@ -60,6 +60,7 @@ public class Controllers {
 
             pidOut = -Kp * error + -Ki * accumulatedError + -Kd * delta_error; //main pid math
             pidOut = Functions.Clamp(pidOut, -kClampOut, kClampOut); //final result is clamped, which is basically velocity limit, voltage and speed are proportional
+
             if (kClampOutRate > 0) {
                 pidOut = Functions.Clamp(-oldPidOut + pidOut, -kClampOutRate, kClampOutRate);
             }//limits acceleration, if specified
@@ -148,6 +149,7 @@ public class Controllers {
 
             pidOut = -Kp * error + -Ki * accumulatedError + -Kd * delta_error; //main pid math
             pidOut = Functions.Clamp(pidOut, -kClampOut, kClampOut); //final result is clamped, which is basically velocity limit, voltage and speed are proportional
+
             if (kClampOutRate > 0) {
                 pidOut = Functions.Clamp(-oldPidOut + pidOut, -kClampOutRate, kClampOutRate);
             }//limits acceleration, if specified
@@ -156,7 +158,7 @@ public class Controllers {
         }
 
         //new setPoint for pid to follow
-        public void setNewAgnle(double setPoint) {
+        public void setNewAngle(double setPoint) {
             setAngle = setPoint;
         }
 
