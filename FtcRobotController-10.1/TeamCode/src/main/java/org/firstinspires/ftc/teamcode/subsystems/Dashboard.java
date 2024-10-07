@@ -20,6 +20,15 @@ public class Dashboard {
         public static double cycleRate = 10;
     }
 
+    @Config
+    public static class DriveTrain {
+        //variables for checking motors
+
+        public static double Kp = 0;
+        public static double Kd = 0;
+
+    }
+
 
 
 

@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.subsystems.Constants;
-import org.firstinspires.ftc.teamcode.subsystems.Dashboard;
 import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
 import org.firstinspires.ftc.teamcode.subsystems.Functions;
 import org.firstinspires.ftc.teamcode.subsystems.PeriodicScheduler;
@@ -56,7 +55,8 @@ public class Main1 extends OpMode {
         double RSX = Functions.Exponential(Functions.DeadZone(gamepadEx.getRightX(), Constants.Controllers.controllerDeadZone));
         double RSAngle = 90-Math.toDegrees(Math.atan2(RSY, RSX));
 
-        driveTrain.directDrive(LSY, LSX, RSY , RSX);
+
+        driveTrain.FieldOrientDrive(LSY, LSX, RSY, RSX);
 
     }
 
