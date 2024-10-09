@@ -27,6 +27,7 @@ public class DriveTrain  extends Periodic{
     //Var
     double RSAngle; //for printing values into Dashboard
     double LSAngle; //for printing values into Dashboard
+    double LSMagnitude;
 
 
 
@@ -86,7 +87,7 @@ public class DriveTrain  extends Periodic{
         RSAngle = Constants.Controllers.FTCjoystick360RIGHT(Constants.Controllers.getJoyStickAngleDegree(RSvx,RSvy)); //Calculating angle from vector and converting to 360 bearing
 
         //getting joystick magnitude
-        double LSMagnitude = Functions.VectorMagnitude(LSvy, LSvx); //find magnitude of the vector
+        LSMagnitude = Functions.VectorMagnitude(LSvy, LSvx); //find magnitude of the vector
         double RSMagnitude = Functions.VectorMagnitude(RSvy,RSvx); //find magnitude of the vector
 
 
@@ -129,10 +130,7 @@ public class DriveTrain  extends Periodic{
         posPID.calculatePID(getYaw()); //calculate pid, +90 added to compensate for joystick offset from bearing
 
         posPID.tunePID(Dashboard.DriveTrain.Kp,0,Dashboard.DriveTrain.Kd);
-        dashboardTelemetry.addData("gyro", getYaw());
-        dashboardTelemetry.addData("RSA", RSAngle);
-
-        dashboardTelemetry.addData("set", Functions.DeltaAngleDeg(getYaw(), RSAngle));
+        dashboardTelemetry.addData("RSA", LSMagnitude);
         dashboardTelemetry.update();
     }
 

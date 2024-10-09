@@ -19,9 +19,6 @@ public class Main1 extends OpMode {
     private GamepadEx gamepadEx;
 
 
-
-    static volatile double runtimeAve = 0;
-
     //when INT is hit, run once
     @Override
     public void init() {
@@ -54,8 +51,8 @@ public class Main1 extends OpMode {
         double RSY = -Functions.Exponential(Functions.DeadZone(gamepadEx.getRightY(), Constants.Controllers.controllerDeadZone));
         double RSX = Functions.Exponential(Functions.DeadZone(gamepadEx.getRightX(), Constants.Controllers.controllerDeadZone));
 
-
-        driveTrain.FieldOrientDrive(LSY, LSX, RSY, RSX);
+        driveTrain.directDrive(LSY, LSX, RSY, RSX);
+        //driveTrain.FieldOrientDrive(LSY, LSX, RSY, RSX);
 
     }
 
