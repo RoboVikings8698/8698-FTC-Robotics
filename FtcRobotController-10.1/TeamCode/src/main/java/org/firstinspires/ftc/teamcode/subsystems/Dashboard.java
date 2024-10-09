@@ -24,8 +24,8 @@ public class Dashboard {
     public static class DriveTrain {
         //variables for checking motors
 
-        public static double Kp = 0;
-        public static double Kd = 0;
+        public static double Kd = 0.03;
+        public static double Kp = 0.018;
 
     }
 

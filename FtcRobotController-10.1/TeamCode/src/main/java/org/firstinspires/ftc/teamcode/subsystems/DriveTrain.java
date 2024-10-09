@@ -39,7 +39,7 @@ public class DriveTrain  extends Periodic{
 
         //pid initialization stuff
         PID = new Controllers();
-        posPID = PID.new AngularPID(0, 0, 0, 0, 1);
+        posPID = PID.new AngularPID(Constants.DriveTrain.Kp, 0, Constants.DriveTrain.Kd, 0, 1);
 
         //create motor objects and hardwareMap them
         motor_1 = new Motors(hardwareMap, Constants.Motors.Motor1);
@@ -77,7 +77,7 @@ public class DriveTrain  extends Periodic{
         motor_1.set(joystick1-joystick2-joystick4);
         motor_2.set(-joystick1-joystick2-joystick4);
         motor_3.set(joystick1+joystick2-joystick4);
-        motor_4.set(joystick1+joystick2-joystick4);
+        motor_4.set(-joystick1+joystick2-joystick4);
     }
 
     public void FieldOrientDrive(double LSvy, double LSvx, double RSvy, double RSvx) {

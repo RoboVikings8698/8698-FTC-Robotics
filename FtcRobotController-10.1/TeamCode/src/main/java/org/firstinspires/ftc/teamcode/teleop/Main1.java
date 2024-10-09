@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -46,13 +47,15 @@ public class Main1 extends OpMode {
         PeriodicScheduler.runPeriodically();
 
         //controller input management
-        double LSY = -Functions.Exponential(Functions.DeadZone(gamepadEx.getLeftY(), Constants.Controllers.controllerDeadZone));
-        double LSX = Functions.Exponential(Functions.DeadZone(gamepadEx.getLeftX(), Constants.Controllers.controllerDeadZone)); //gets each controller's inputs
+        double LSY = -Functions.DeadZone(gamepadEx.getLeftY(), Constants.Controllers.controllerDeadZone);
+        double LSX = Functions.DeadZone(gamepadEx.getLeftX(), Constants.Controllers.controllerDeadZone); //gets each controller's inputs
         double RSY = -Functions.Exponential(Functions.DeadZone(gamepadEx.getRightY(), Constants.Controllers.controllerDeadZone));
         double RSX = Functions.Exponential(Functions.DeadZone(gamepadEx.getRightX(), Constants.Controllers.controllerDeadZone));
 
-        driveTrain.directDrive(LSY, LSX, RSY, RSX);
-        //driveTrain.FieldOrientDrive(LSY, LSX, RSY, RSX);
+        //driveTrain.directDrive(LSY, LSX, RSY, RSX);
+        driveTrain.FieldOrientDrive(LSY, LSX, RSY, RSX);
+
+        if (gamepadEx.getButton(GamepadKeys.Button.RIGHT_BUMPER)){ driveTrain.resetYaw();}
 
     }
 
