@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.subsystems.Constants;
-import org.firstinspires.ftc.teamcode.subsystems.Dashboard;
 import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
 import org.firstinspires.ftc.teamcode.subsystems.Functions;
 import org.firstinspires.ftc.teamcode.subsystems.PeriodicScheduler;
@@ -19,9 +18,6 @@ public class Main1 extends OpMode {
     private DriveTrain driveTrain;
     private GamepadEx gamepadEx;
 
-
-
-    static volatile double runtimeAve = 0;
 
     //when INT is hit, run once
     @Override
@@ -54,10 +50,9 @@ public class Main1 extends OpMode {
         double LSX = Functions.Exponential(Functions.DeadZone(gamepadEx.getLeftX(), Constants.Controllers.controllerDeadZone)); //gets each controller's inputs
         double RSY = -Functions.Exponential(Functions.DeadZone(gamepadEx.getRightY(), Constants.Controllers.controllerDeadZone));
         double RSX = Functions.Exponential(Functions.DeadZone(gamepadEx.getRightX(), Constants.Controllers.controllerDeadZone));
-        double RSAngle = 90-Math.toDegrees(Math.atan2(RSY, RSX));
 
-        driveTrain.FieldDrive(LSY, LSX, RSY, RSX);
-
+        driveTrain.directDrive(LSY, LSX, RSY, RSX);
+        //driveTrain.FieldOrientDrive(LSY, LSX, RSY, RSX);
 
     }
 

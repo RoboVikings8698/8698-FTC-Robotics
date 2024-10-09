@@ -2,8 +2,6 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import static com.qualcomm.hardware.rev.RevHubOrientationOnRobot.xyzOrientation;
 
-import static java.lang.Math.sqrt;
-
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -20,18 +18,28 @@ public class DriveTrain  extends Periodic{
     private IMU imu; //gyro stuff
     private RevHubOrientationOnRobot orientationOnRobot;
 
-    private Controllers PID;
-    public Controllers.PositionPID posPID;
+    private Controllers PID; //declare PID
+    public Controllers.AngularPID posPID; //declare position PID
 
-    FtcDashboard dashboard = FtcDashboard.getInstance();
-    Telemetry dashboardTelemetry = dashboard.getTelemetry();
+    FtcDashboard dashboard = FtcDashboard.getInstance();  //declaration dashboard
+    Telemetry dashboardTelemetry = dashboard.getTelemetry(); //declaration dashboard
+
+    //Var
+    double RSAngle; //for printing values into Dashboard
+    double LSAngle; //for printing values into Dashboard
+    double LSMagnitude;
+
+
+
+
 
     //constructor, called once object is created
     public DriveTrain(HardwareMap hardwareMap){
-        super(5000, 0);  //
+        super(10, 5);  //
 
+        //pid initialization stuff
         PID = new Controllers();
-        posPID = PID.new PositionPID(0, 0, 0, 0, 0);
+        posPID = PID.new AngularPID(0, 0, 0, 0, 1);
 
         //create motor objects and hardwareMap them
         motor_1 = new Motors(hardwareMap, Constants.Motors.Motor1);
@@ -50,14 +58,11 @@ public class DriveTrain  extends Periodic{
         orientationOnRobot = new RevHubOrientationOnRobot(hubRotation);
         imu.initialize(new IMU.Parameters(orientationOnRobot));
 
-        //setup periodic for motors
+        //setup periodic for motors, in case with want to setup velocity pid
         PeriodicScheduler.register(motor_1);
         PeriodicScheduler.register(motor_2);
         PeriodicScheduler.register(motor_3);
         PeriodicScheduler.register(motor_4);
-
-
-
     }
 
 
@@ -75,16 +80,26 @@ public class DriveTrain  extends Periodic{
         motor_4.set(joystick1+joystick2-joystick4);
     }
 
+    public void FieldOrientDrive(double LSvy, double LSvx, double RSvy, double RSvx) {
 
-    public void FieldDrive(double vecyL, double vecxL, double vecyR, double vecxR) {
-        double RSAngle = 90-Math.toDegrees(Math.atan2(vecyR,vecxR));
-        double rcomp = posPID.getPidOut();
-        posPID.setNewPoint(RSAngle);
+        //getting bearing degree from controllers
+        LSAngle = Constants.Controllers.FTCjoystick360LEFT(Constants.Controllers.getJoyStickAngleDegree(LSvx,LSvy)); //Calculating angle from vector and converting to 360 bearing
+        RSAngle = Constants.Controllers.FTCjoystick360RIGHT(Constants.Controllers.getJoyStickAngleDegree(RSvx,RSvy)); //Calculating angle from vector and converting to 360 bearing
 
-        posPID.setPidOut(Math.abs(sqrt((vecyR * vecyR) + (vecxR * vecxR))),
-        motor_2.set(vecyL - vecxL + rcomp);
-        motor_3.set(vecyL - vecxL - rcomp);
-        motor_4.set(vecyL + vecxL + rcomp);
+        //getting joystick magnitude
+        LSMagnitude = Functions.VectorMagnitude(LSvy, LSvx); //find magnitude of the vector
+        double RSMagnitude = Functions.VectorMagnitude(RSvy,RSvx); //find magnitude of the vector
+
+
+        posPID.setNewAngle(RSAngle);//new "mission" for PID
+        double yawComp = posPID.getPidOut(); //save calculated PId output
+
+
+        //motor stuff, basically, take left joystick vector break it into degrees and magnitude, compensate for motor offset and feed into motors. Also multiply pid out to prevent robot from keeping yaw position while zero feed from driver
+        motor_1.set(-(LSMagnitude*Math.cos(Math.toRadians(LSAngle-getYaw()))) + LSMagnitude*Math.sin(Math.toRadians(LSAngle-getYaw())) - RSMagnitude * yawComp);
+        motor_2.set((LSMagnitude*Math.cos(Math.toRadians(LSAngle-getYaw()))) + LSMagnitude*Math.sin(Math.toRadians(LSAngle-getYaw())) - RSMagnitude * yawComp);
+        motor_3.set(-(LSMagnitude*Math.cos(Math.toRadians(LSAngle-getYaw()))) - LSMagnitude*Math.sin(Math.toRadians(LSAngle-getYaw())) - RSMagnitude * yawComp);
+        motor_4.set((LSMagnitude*Math.cos(Math.toRadians(LSAngle-getYaw()))) - LSMagnitude*Math.sin(Math.toRadians(LSAngle-getYaw())) - RSMagnitude * yawComp);
     }
 
 
@@ -111,8 +126,12 @@ public class DriveTrain  extends Periodic{
 
     @Override
     public void periodic() {
-        posPID.calculatePID(getYaw());
+        //calling pid every now on
+        posPID.calculatePID(getYaw()); //calculate pid, +90 added to compensate for joystick offset from bearing
 
+        posPID.tunePID(Dashboard.DriveTrain.Kp,0,Dashboard.DriveTrain.Kd);
+        dashboardTelemetry.addData("RSA", LSMagnitude);
+        dashboardTelemetry.update();
     }
 
 

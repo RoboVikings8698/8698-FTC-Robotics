@@ -24,9 +24,17 @@ public class Functions {
     public static double Pythagorean(double x, double y) {
         return Math.sqrt((x * x) + (y * y));
     }
+
+    //calculate vector magnitude
+    public static double VectorMagnitude(double x, double y){
+        return Math.abs(Math.sqrt((x * x) + (y * y)));
+    }
+
+    //delta angle
     public static double DeltaAngleDeg(double startAngle, double endAngle) {
         return((((endAngle - startAngle - 180) % 360) +360) % 360) - 180;
     }
+
     public static double DeltaAngleRadians(double startAngle, double endAngle) {
         return ((((endAngle - startAngle - Math.PI) % (2*Math.PI)) + (2*Math.PI)) % (2*Math.PI))-Math.PI;
     }
@@ -56,7 +64,8 @@ public class Functions {
     }
 
     public static boolean InRangeOf(double number, double referenceNumber, double rangeOf) { return (referenceNumber + rangeOf > number && referenceNumber - rangeOf < number); }
-    public static double AltAxisCoord(double x, double y, double a) //i dont know how to explain what this does, but it uses radians.
+    // graph link https://www.desmos.com/calculator/ccaguak1ra
+    public static double AltAxisCoord(double x, double y, double a) //two graph planes, on over another, you have point on the bottom one, and you have know angle offset of the top one relative tot eh bottom one, function will return coordinates of the top one
     {
         double s = Math.sin(a)*Math.cos(a)*(x*Cot(a)+y);
         return (Math.tan(a)*s<0?(Math.sin(a)>0?-1:1):(Math.sin(a)<0?-1:1))
