@@ -100,6 +100,7 @@ public class DriveTrain  extends Periodic{
         motor_2.set((LSMagnitude*Math.cos(Math.toRadians(LSAngle-getYaw()))) + LSMagnitude*Math.sin(Math.toRadians(LSAngle-getYaw())) - RSMagnitude * yawComp);
         motor_3.set(-(LSMagnitude*Math.cos(Math.toRadians(LSAngle-getYaw()))) - LSMagnitude*Math.sin(Math.toRadians(LSAngle-getYaw())) - RSMagnitude * yawComp);
         motor_4.set((LSMagnitude*Math.cos(Math.toRadians(LSAngle-getYaw()))) - LSMagnitude*Math.sin(Math.toRadians(LSAngle-getYaw())) - RSMagnitude * yawComp);
+
     }
 
 
