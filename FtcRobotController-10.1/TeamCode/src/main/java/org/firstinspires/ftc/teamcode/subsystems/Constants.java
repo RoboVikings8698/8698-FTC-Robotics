@@ -9,7 +9,7 @@ public final class Constants {
         public static final String Motor4 = "motor4"; //SPECIFY MOTOR LOCATION
 
         //when motor on standby: 0 - coast, 1 - break, 2 - hold
-        public static final int StandbyMode = 0;
+        public static final int StandbyMode = 1;
 
         //PID STUFF
         public static double Kp = 0.009;
@@ -25,9 +25,9 @@ public final class Constants {
     public static final class DriveTrain{
 
         //PID STUFF
-        public static double Kp = 0.0;
+        public static double Kp = 0.018;
         public static double Ki = 0;
-        public static double Kd = 0.0;
+        public static double Kd = 0.03;
         public static double KiClamp = 0;
         public static double KOutClamp = 0;
 
