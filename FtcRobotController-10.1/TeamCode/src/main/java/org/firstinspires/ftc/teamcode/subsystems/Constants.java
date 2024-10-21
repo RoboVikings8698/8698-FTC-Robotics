@@ -53,7 +53,7 @@ public final class Constants {
         public static double Ki = 0;
         public static double Kd = 0.03;
         public static double KiClamp = 0;
-        public static double KOutClamp = 0;
+        public static double KOutClamp = 1;
 
     }
 

@@ -20,7 +20,9 @@ public class DriveTrain  extends Periodic{
     private RevHubOrientationOnRobot orientationOnRobot; //gyro stuff
 
     private Controllers PID; //declare PID
-    public Controllers.AngularPID posPID; //declare position PID
+    public Controllers.AngularPID posPID; //declare position PI// D
+
+    double RSAngle = 0;
 
     //dash board stuff
     FtcDashboard dashboard = FtcDashboard.getInstance();  //declaration dashboard
@@ -86,7 +88,7 @@ public class DriveTrain  extends Periodic{
 
         //getting bearing degree from controllers
         double LSAngle = Constants.Controllers.FTCjoystick360LEFT(Constants.Controllers.getJoyStickAngleDegree(LSvx,LSvy)); //Calculating angle from vector and converting to 360 bearing
-        double RSAngle = Constants.Controllers.FTCjoystick360RIGHT(Constants.Controllers.getJoyStickAngleDegree(RSvx,RSvy)); //Calculating angle from vector and converting to 360 bearing
+        RSAngle = Constants.Controllers.FTCjoystick360RIGHT(Constants.Controllers.getJoyStickAngleDegree(RSvx,RSvy)); //Calculating angle from vector and converting to 360 bearing
 
         //getting joystick magnitude
         double LSMagnitude = Functions.VectorMagnitude(LSvy, LSvx); //find magnitude of the vector
@@ -135,10 +137,11 @@ public class DriveTrain  extends Periodic{
     public void periodic() {
         //calling pid every now on
         posPID.calculatePID(getYaw()); //calculate pid, +90 added to compensate for joystick offset from bearing
-        posPID.tunePID(Dashboard.DriveTrain.Kp,0,Dashboard.DriveTrain.Kd);
 
-        //dashboardTelemetry.addData("RSA", LSMagnitude);
-        //dashboardTelemetry.update();
+        dashboardTelemetry.addData("gro", getYaw());
+        dashboardTelemetry.addData("pid out", posPID.getPidOut());
+        dashboardTelemetry.addData("gamepad", RSAngle);
+        dashboardTelemetry.update();
     }
 
 
