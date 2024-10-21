@@ -2,12 +2,14 @@ package org.firstinspires.ftc.teamcode.teleop;
 
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.subsystems.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
 import org.firstinspires.ftc.teamcode.subsystems.Functions;
+import org.firstinspires.ftc.teamcode.subsystems.Motors;
 import org.firstinspires.ftc.teamcode.subsystems.PeriodicScheduler;
 
 
@@ -18,13 +20,14 @@ public class Main1 extends OpMode {
 
     private DriveTrain driveTrain;
     private GamepadEx gamepadEx;
-
+    private Motors motorLift;
 
     //when INT is hit, run once
     @Override
     public void init() {
         // Initialize class-level driveTrain and gamepadEx
         driveTrain = new DriveTrain(hardwareMap);  // Don't redeclare with 'DriveTrain' keyword
+        motorLift = new Motors(hardwareMap, Constants.Motors.MotorLift, Constants.Motors.MotorB5202312crp, Constants.Motors.MotorB5202312rpm, Constants.Motors.ML_DR_StandbyMode);
         PeriodicScheduler.register(driveTrain);
         gamepadEx = new GamepadEx(gamepad1);  // Initialize class-level gamepadEx
     }
@@ -57,8 +60,16 @@ public class Main1 extends OpMode {
 
         if (gamepadEx.getButton(GamepadKeys.Button.RIGHT_BUMPER)){ driveTrain.resetYaw();}
 
+        if (gamepadEx.getButton(GamepadKeys.Button.A)) {
 
+            motorLift.set(-1);
 
+        }else if (gamepadEx.getButton(GamepadKeys.Button.B)){
+
+            motorLift.set(1);
+        }else {
+            motorLift.set(0);
+        }
     }
 
     //Once stop is pressed run this once

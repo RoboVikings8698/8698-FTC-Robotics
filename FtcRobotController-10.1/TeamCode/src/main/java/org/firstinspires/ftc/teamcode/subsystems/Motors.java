@@ -26,7 +26,7 @@ public class Motors extends Periodic{
 
 
     //constructor
-    Motors(HardwareMap hardwareMap, String MotNam, double PID_cycle, double kp, double ki, double kd, double kiclamp, double koutClamp, double M_CPR, double M_RPM, double driveMode){
+    public Motors(HardwareMap hardwareMap, String MotNam, double PID_cycle, double kp, double ki, double kd, double kiclamp, double koutClamp, double M_CPR, double M_RPM, double driveMode){
         //set periodic rate, 10ms
         super((long)PID_cycle, 0);
         //PID stuff, skip it
@@ -58,7 +58,7 @@ public class Motors extends Periodic{
     }
     //constructor
 
-    Motors(HardwareMap hardwareMap, String MotNam, double M_CPR, double M_RPM, double driveMode){
+    public Motors(HardwareMap hardwareMap, String MotNam, double M_CPR, double M_RPM, double driveMode){
         super(1000000, 0);
         //set periodic rate, 10ms
 
@@ -85,13 +85,13 @@ public class Motors extends Periodic{
         m_motor.resetEncoder();
     }
 
-    //motor Functions
+    //motor Functions, from -1 to 1.
     public void set(double RawPower){m_motor.set(RawPower);}
 
-    //get motorPosition
+    //get motorPosition, requires encoder
     public int getPosition(){return encoder.getPosition();}
 
-    //get motor velocity
+    //get motor velocity, requires encoder
     public double getVelocity(){return encoder.getCorrectedVelocity();};
 
     //PID controlled
@@ -99,6 +99,9 @@ public class Motors extends Periodic{
     {
         pid.setNewPoint(setpoint);
     }
+
+
+
 
 //this will run periodically if pid is used on that particular motor
     @Override

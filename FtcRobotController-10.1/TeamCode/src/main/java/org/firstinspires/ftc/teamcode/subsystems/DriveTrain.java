@@ -42,10 +42,10 @@ public class DriveTrain  extends Periodic{
         posPID = PID.new AngularPID(Constants.DriveTrain.Kp, Constants.DriveTrain.Ki, Constants.DriveTrain.Kd, Constants.DriveTrain.KiClamp, Constants.DriveTrain.KOutClamp);
 
         //create motor objects and hardwareMap them
-        motor_1 = new Motors(hardwareMap, Constants.Motors.Motor1, Constants.Motors.MotorB312crp, Constants.Motors.MotorB312rpm, Constants.Motors.DT_StandbyMode);
-        motor_2 = new Motors(hardwareMap, Constants.Motors.Motor2, Constants.Motors.MotorB312crp, Constants.Motors.MotorB312rpm, Constants.Motors.DT_StandbyMode);
-        motor_3 = new Motors(hardwareMap, Constants.Motors.Motor3, Constants.Motors.MotorB312crp, Constants.Motors.MotorB312rpm, Constants.Motors.DT_StandbyMode);
-        motor_4 = new Motors(hardwareMap, Constants.Motors.Motor4, Constants.Motors.MotorB312crp, Constants.Motors.MotorB312rpm, Constants.Motors.DT_StandbyMode);
+        motor_1 = new Motors(hardwareMap, Constants.Motors.Motor1, Constants.Motors.MotorB5202312crp, Constants.Motors.MotorB5202312rpm, Constants.Motors.DT_StandbyMode);
+        motor_2 = new Motors(hardwareMap, Constants.Motors.Motor2, Constants.Motors.MotorB5202312crp, Constants.Motors.MotorB5202312rpm, Constants.Motors.DT_StandbyMode);
+        motor_3 = new Motors(hardwareMap, Constants.Motors.Motor3, Constants.Motors.MotorB5202312crp, Constants.Motors.MotorB5202312rpm, Constants.Motors.DT_StandbyMode);
+        motor_4 = new Motors(hardwareMap, Constants.Motors.Motor4, Constants.Motors.MotorB5202312crp, Constants.Motors.MotorB5202312rpm, Constants.Motors.DT_StandbyMode);
 
         //GYRO STUFF
         imu = hardwareMap.get(IMU.class, "imu");

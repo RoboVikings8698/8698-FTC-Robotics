@@ -4,8 +4,8 @@ public final class Constants {
 
     //ALL MOTOR DECLARATIONS HERE
     public static final class Motors {
-        public static final double MotorB312crp = 537.7;
-        public static final double MotorB312rpm = 312;
+        public static final double MotorB5202312crp = 537.7;
+        public static final double MotorB5202312rpm = 312;
         //motor mapping constants DriveTrain
         public static final String Motor1 = "motor1"; //SPECIFY MOTOR LOCATION
         public static final String Motor2 = "motor2"; //SPECIFY MOTOR LOCATION
@@ -31,7 +31,7 @@ public final class Constants {
         //EXAMPLE FOR EACH MOTOR
         /*
         public static final String MotorArm = "motorArm"; //SPECIFY MOTOR LOCATION From drive hub
-        public static final boolean MorArm_PID_Enable = false;
+        public static final boolean MotorArm_PID_Enable = false;
         public static final double MA_Kp = 0;
         public static final double MA_Ki = 0;
         public static final double MA_Kd = 0;
@@ -41,7 +41,15 @@ public final class Constants {
         public static final int MA_DR_StandbyMode = 1;
          */
 
-
+        public static final String MotorLift = "motorLift";
+        public static final boolean MotorLift_PID_Enable = false;
+        public static final double ML_Kp = 0;
+        public static final double ML_Ki = 0;
+        public static final double ML_Kd = 0;
+        public static final double ML_KiClamp = 0;
+        public static final double ML_KOutClamp = 0;
+        public static double ML_cycleRate = 20; //update time pid
+        public static final int ML_DR_StandbyMode = 0;
 
     }
 
