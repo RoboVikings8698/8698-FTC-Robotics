@@ -4,6 +4,8 @@ package org.firstinspires.ftc.teamcode.subsystems;
  */
 
 
+import static java.lang.Math.cos;
+
 public class Controllers {
 
 
@@ -16,27 +18,14 @@ public class Controllers {
         private double Kd;
         private double kClampOut; //clamps pid output
         private double kiClamp; //clamps ki to prevents integral windup
-        //basically velocity limit
-        private double kClampOutRate = 0; //limits pid output rate of change
 
         //actively used
         private double input = 0;
         public double setpoint = 0;
         private double oldError = 0;
         private double accumulatedError;
-        private double oldPidOut;
         private double pidOut;
 
-
-        //constructor when new PID controller created
-        public PositionPID(double kp, double ki, double kd, double kiclamp, double koutClamp, double kclampoutrate) {
-            Kp = kp;
-            Ki = ki;
-            kiClamp = kiclamp;
-            Kd = kd;
-            kClampOut = koutClamp;
-            kClampOutRate = kclampoutrate;
-        }
 
         //constructor when new PID controller created
         public PositionPID(double kp, double ki, double kd, double kiclamp, double koutClamp) {
@@ -48,7 +37,7 @@ public class Controllers {
         }
 
 
-        //should be run periodically at constant rate for best results, feed current position
+        //should be run periodically at constant rate for best results, feed current position for precision delta time can be used
         public void calculatePID(double InPut) {
             input = InPut;
             //some math
@@ -60,10 +49,6 @@ public class Controllers {
             pidOut = -Kp * error + -Ki * accumulatedError + -Kd * delta_error; //main pid math
             pidOut = Functions.Clamp(pidOut, -kClampOut, kClampOut); //final result is clamped, which is basically velocity limit, voltage and speed are proportional
 
-            if (kClampOutRate > 0) {
-                pidOut = Functions.Clamp(-oldPidOut + pidOut, -kClampOutRate, kClampOutRate);
-            }//limits acceleration, if specified
-            oldPidOut = pidOut; //update var for next cycle
             oldError = error; //update var for next cycle
         }
 
@@ -80,25 +65,10 @@ public class Controllers {
         }
 
 
-
         //result of pid calculation
-
         public double getPidOut(){
             return pidOut;
         }
-
-
-
-        //set new pid params for devs
-        public void setPIDparams(double kp, double ki, double kd, double kiclamp, double kOut, double kclampoutrate){
-            Kp = kp;
-            Ki = ki;
-            Kd = kd;
-            kClampOut = kOut;
-            kiClamp = kiclamp;
-            kClampOutRate = kclampoutrate;
-        }
-
     }
 
     public class AngularPID{
@@ -108,27 +78,14 @@ public class Controllers {
         private double Kd;
         private double kClampOut; //clamps pid output
         private double kiClamp; //clamps ki to prevents integral windup
-        //basically velocity limit
-        private double kClampOutRate = 0; //limits pid output rate of change
 
         //actively used
         private double input = 0;
         public double setAngle = 0;
         private double oldError = 0;
         private double accumulatedError;
-        private double oldPidOut;
         private double pidOut;
 
-
-        //constructor when new PID controller created
-        public AngularPID(double kp, double ki, double kd, double kiclamp, double koutClamp, double kclampoutrate) {
-            Kp = kp;
-            Ki = ki;
-            kiClamp = kiclamp;
-            Kd = kd;
-            kClampOut = koutClamp;
-            kClampOutRate = kclampoutrate;
-        }
 
         //constructor when new PID controller created
         public AngularPID(double kp, double ki, double kd, double kiclamp, double koutClamp) {
@@ -152,10 +109,6 @@ public class Controllers {
             pidOut = -Kp * error + -Ki * accumulatedError + -Kd * delta_error; //main pid math
             pidOut = Functions.Clamp(pidOut, -kClampOut, kClampOut); //final result is clamped, which is basically velocity limit, voltage and speed are proportional
 
-            if (kClampOutRate > 0) {
-                pidOut = Functions.Clamp(-oldPidOut + pidOut, -kClampOutRate, kClampOutRate);
-            }//limits acceleration, if specified
-            oldPidOut = pidOut; //update var for next cycle
             oldError = error; //update var for next cycle
         }
 
@@ -176,19 +129,7 @@ public class Controllers {
             return pidOut;
         }
 
-
-
-        //set new pid params for devs
-        public void setPIDparams(double kp, double ki, double kd, double kiclamp, double kOut, double kclampoutrate){
-            Kp = kp;
-            Ki = ki;
-            Kd = kd;
-            kClampOut = kOut;
-            kiClamp = kiclamp;
-            kClampOutRate = kclampoutrate;
-        }
-
-        //delta angle
+        //delta angle used to calculate angle difference
         private double DeltaAngleDeg(double startAngle, double endAngle) {
             return((((endAngle - startAngle - 180) % 360) +360) % 360) - 180;
         }
@@ -203,27 +144,13 @@ public class Controllers {
         private double Kd;
         private double kClampOut; //clamps pid output
         private double kiClamp; //clamps ki to prevents integral windup
-        //basically velocity limit
-        private double kClampOutRate = 0; //limits pid output rate of change
 
         //actively used
         private double input = 0;
         public double setpoint = 0;
         private double oldError = 0;
         private double accumulatedError;
-        private double oldPidOut;
         private double pidOut;
-
-
-        //constructor when new PID controller created
-        public VelocityPID(double kp, double ki, double kd, double kiclamp, double koutClamp, double kclampoutrate) {
-            Kp = kp;
-            Ki = ki;
-            kiClamp = kiclamp;
-            Kd = kd;
-            kClampOut = koutClamp;
-            kClampOutRate = kclampoutrate;
-        }
 
         //constructor when new PID controller created
         public VelocityPID(double kp, double ki, double kd, double kiclamp, double koutClamp) {
@@ -247,10 +174,6 @@ public class Controllers {
             pidOut = -Kp * error + -Ki * accumulatedError + -Kd * delta_error; //main pid math
             pidOut = Functions.Clamp(pidOut, -kClampOut, kClampOut); //final result is clamped, which is basically velocity limit, voltage and speed are proportional
 
-            if (kClampOutRate > 0) {
-                pidOut = Functions.Clamp(-oldPidOut + pidOut, -kClampOutRate, kClampOutRate);
-            }//limits acceleration, if specified
-            oldPidOut = pidOut; //update var for next cycle
             oldError = error; //update var for next cycle
         }
 
@@ -270,20 +193,6 @@ public class Controllers {
         public double getPidOut(){
             return pidOut;
         }
-
-
-
-        //set new pid params for devs
-        public void setPIDparams(double kp, double ki, double kd, double kiclamp, double kOut, double kclampoutrate){
-            Kp = kp;
-            Ki = ki;
-            Kd = kd;
-            kClampOut = kOut;
-            kiClamp = kiclamp;
-            kClampOutRate = kclampoutrate;
-        }
-
-
     }
 
     public class CascadePID{
@@ -291,20 +200,67 @@ public class Controllers {
 
     }
 
-    public class FeedFarward {
+    //predictable stuff can be taken care by feedforward and then any error can be compensated by PID.
+    public class FeedForward {
 
-        private double Ks; //voltage needed to make something move
-        private double Kv; //voltage need to keep speed
-        private double Ka; //voltage needed to achieve acceleration
+        private int feedForward_type = 0; //0-default, 1-elevator, 2-arm
+
+        /*
+            There are several ways to implement feedforward, guess the system assuming that the system is mostly linear,
+             or creating system mathematical model that will be us to calculate feedforward.
+        */
 
 
+        private double V;  //calculated voltage
+        private double Ref_velocity; //reference velocity
+        private double Ref_acceleration; //reference acceleration
+        private double dir; //direction (-1 or 1)
+        private double theta; //in case of arm use, this variable with store arm position
 
+        private double Kg; //gravitation acceleration (metric)
+        private double Ks; //voltage needed to make something just to start moving
+        private double Kv; //voltage need to keep reference speed
+        private double Ka; //voltage needed to achieve reference acceleration
 
+        //set FeedForward
+        FeedForward(double type, double kg, double ks, double kv, double ka){
+            feedForward_type = 0;
+            Kg = kg;
+            Ks = ks;
+            Kv = kv;
+            Ka = ka;
+        }
 
+        FeedForward(double type, double ks, double kv, double ka){
+            feedForward_type = 0;
+            Kg = 0;
+            Ks = ks;
+            Kv = kv;
+            Ka = ka;
+        }
 
+        //calculates FF and returns calculated voltage
+        public double calculateSimpleFF(){
 
-    }
+            switch(feedForward_type){
+                case 0:
+                    V = Ks * dir + Kv * Ref_velocity + Ka * Ref_acceleration;
+                    break;
+                case 1:
+                    V = Kg + Ks * dir + Kv * Ref_velocity + Ka * Ref_acceleration;
+                    break;
+                case 2:
+                    V = Kg*cos(theta) * Ks*dir + Kv * Ref_velocity + Ka * Ref_acceleration;
+                    break;
 
+                default:
+                    V = Ks * dir + Kv * Ref_velocity + Ka * Ref_acceleration;
+            }
+
+            return V;
+
+        }
+        }
 
 }
 

@@ -14,20 +14,20 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 public class DriveTrain  extends Periodic{
 
+    //mototor declaration
     private Motors motor_1, motor_2, motor_3, motor_4;
     private IMU imu; //gyro stuff
-    private RevHubOrientationOnRobot orientationOnRobot;
+    private RevHubOrientationOnRobot orientationOnRobot; //gyro stuff
 
     private Controllers PID; //declare PID
-    public Controllers.AngularPID posPID; //declare position PID
+    public Controllers.AngularPID posPID; //declare position PI// D
 
+    double RSAngle = 0;
+
+    //dash board stuff
     FtcDashboard dashboard = FtcDashboard.getInstance();  //declaration dashboard
     Telemetry dashboardTelemetry = dashboard.getTelemetry(); //declaration dashboard
 
-    //Var
-    double RSAngle; //for printing values into Dashboard
-    double LSAngle; //for printing values into Dashboard
-    double LSMagnitude;
 
 
 
@@ -39,13 +39,13 @@ public class DriveTrain  extends Periodic{
 
         //pid initialization stuff
         PID = new Controllers();
-        posPID = PID.new AngularPID(Constants.DriveTrain.Kp, 0, Constants.DriveTrain.Kd, 0, 1);
+        posPID = PID.new AngularPID(Constants.DriveTrain.Kp, Constants.DriveTrain.Ki, Constants.DriveTrain.Kd, Constants.DriveTrain.KiClamp, Constants.DriveTrain.KOutClamp);
 
         //create motor objects and hardwareMap them
-        motor_1 = new Motors(hardwareMap, Constants.Motors.Motor1);
-        motor_2 = new Motors(hardwareMap, Constants.Motors.Motor2);
-        motor_3 = new Motors(hardwareMap, Constants.Motors.Motor3);
-        motor_4 = new Motors(hardwareMap, Constants.Motors.Motor4);
+        motor_1 = new Motors(hardwareMap, Constants.Motors.Motor1, Constants.Motors.MotorB312crp, Constants.Motors.MotorB312rpm, Constants.Motors.DT_StandbyMode);
+        motor_2 = new Motors(hardwareMap, Constants.Motors.Motor2, Constants.Motors.MotorB312crp, Constants.Motors.MotorB312rpm, Constants.Motors.DT_StandbyMode);
+        motor_3 = new Motors(hardwareMap, Constants.Motors.Motor3, Constants.Motors.MotorB312crp, Constants.Motors.MotorB312rpm, Constants.Motors.DT_StandbyMode);
+        motor_4 = new Motors(hardwareMap, Constants.Motors.Motor4, Constants.Motors.MotorB312crp, Constants.Motors.MotorB312rpm, Constants.Motors.DT_StandbyMode);
 
         //GYRO STUFF
         imu = hardwareMap.get(IMU.class, "imu");
@@ -54,6 +54,7 @@ public class DriveTrain  extends Periodic{
         double yRotation = 0;  // enter the desired Y rotation angle here.
         double zRotation = 0;  // enter the desired Z rotation angle here.
         Orientation hubRotation = xyzOrientation(xRotation, yRotation, zRotation);
+
         // Now initialize the IMU with this mounting orientation
         orientationOnRobot = new RevHubOrientationOnRobot(hubRotation);
         imu.initialize(new IMU.Parameters(orientationOnRobot));
@@ -80,19 +81,26 @@ public class DriveTrain  extends Periodic{
         motor_4.set(-joystick1+joystick2-joystick4);
     }
 
-    public void FieldOrientDrive(double LSvy, double LSvx, double RSvy, double RSvx) {
+    //works perfectly nothing to modify
+    public void FieldOrientDrive(double LSvy, double LSvx, double RSvy, double RSvx, boolean YawOverride, double Yaw) {
+
+        double yawComp = 0;
 
         //getting bearing degree from controllers
-        LSAngle = Constants.Controllers.FTCjoystick360LEFT(Constants.Controllers.getJoyStickAngleDegree(LSvx,LSvy)); //Calculating angle from vector and converting to 360 bearing
+        double LSAngle = Constants.Controllers.FTCjoystick360LEFT(Constants.Controllers.getJoyStickAngleDegree(LSvx,LSvy)); //Calculating angle from vector and converting to 360 bearing
         RSAngle = Constants.Controllers.FTCjoystick360RIGHT(Constants.Controllers.getJoyStickAngleDegree(RSvx,RSvy)); //Calculating angle from vector and converting to 360 bearing
 
         //getting joystick magnitude
-        LSMagnitude = Functions.VectorMagnitude(LSvy, LSvx); //find magnitude of the vector
+        double LSMagnitude = Functions.VectorMagnitude(LSvy, LSvx); //find magnitude of the vector
         double RSMagnitude = Functions.VectorMagnitude(RSvy,RSvx); //find magnitude of the vector
 
+        if(YawOverride){
+            posPID.setNewAngle(Yaw);//new "mission" for PID
+        }else{
+            posPID.setNewAngle(RSAngle);//new "mission" for PID
+            yawComp = posPID.getPidOut(); //save calculated PId output
+        }
 
-        posPID.setNewAngle(RSAngle);//new "mission" for PID
-        double yawComp = posPID.getPidOut(); //save calculated PId output
 
 
         //motor stuff, basically, take left joystick vector break it into degrees and magnitude, compensate for motor offset and feed into motors. Also multiply pid out to prevent robot from keeping yaw position while zero feed from driver
@@ -130,8 +138,9 @@ public class DriveTrain  extends Periodic{
         //calling pid every now on
         posPID.calculatePID(getYaw()); //calculate pid, +90 added to compensate for joystick offset from bearing
 
-        posPID.tunePID(Dashboard.DriveTrain.Kp,0,Dashboard.DriveTrain.Kd);
-        dashboardTelemetry.addData("RSA", LSMagnitude);
+        dashboardTelemetry.addData("gro", getYaw());
+        dashboardTelemetry.addData("pid out", posPID.getPidOut());
+        dashboardTelemetry.addData("gamepad", RSAngle);
         dashboardTelemetry.update();
     }
 
