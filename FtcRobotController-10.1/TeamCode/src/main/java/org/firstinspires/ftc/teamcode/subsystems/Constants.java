@@ -1,33 +1,57 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 public final class Constants {
+
+    //ALL MOTOR DECLARATIONS HERE
     public static final class Motors {
-        //motor mapping constants
+        public static final double MotorB312crp = 537.7;
+        public static final double MotorB312rpm = 312;
+        //motor mapping constants DriveTrain
         public static final String Motor1 = "motor1"; //SPECIFY MOTOR LOCATION
         public static final String Motor2 = "motor2"; //SPECIFY MOTOR LOCATION
         public static final String Motor3 = "motor3"; //SPECIFY MOTOR LOCATION
         public static final String Motor4 = "motor4"; //SPECIFY MOTOR LOCATION
 
-        //when motor on standby: 0 - coast, 1 - break, 2 - hold
-        public static final int StandbyMode = 0;
+        //specify if you want pid enabled or not
+        public static final boolean DT_PID_Enable = false;
 
-        //PID STUFF
-        public static double Kp = 0.009;
-        public static double Ki = 0;
-        public static double Kd = 0.01;
-        public static double KiClamp = 0;
-        public static double KOutClamp = 1;
-        public static double KOutRateClamp = 0;
-        public static double cycleRate = 10;
+        //Drive Train Individual motor PID Param, to find those values proceed with tuning procedure
+        public static final double DT_Kp = 0;
+        public static final double DT_Ki = 0;
+        public static final double DT_Kd = 0;
+        public static final double DT_KiClamp = 0;
+        public static final double DT_KOutClamp = 0;
+        public static double DT_cycleRate = 20; //update time pid
+
+        //Drive Train Motor Mode: 0 - coast, 1 - break
+        public static final int DT_StandbyMode = 1;
+        public static Object cycleRate;
+
+        //THE REST OF NON DRIVE TRAIN RELATED MOTORS ARE PLACED BELLOW
+        //EXAMPLE FOR EACH MOTOR
+        /*
+        public static final String MotorArm = "motorArm"; //SPECIFY MOTOR LOCATION From drive hub
+        public static final boolean MorArm_PID_Enable = false;
+        public static final double MA_Kp = 0;
+        public static final double MA_Ki = 0;
+        public static final double MA_Kd = 0;
+        public static final double MA_KiClamp = 0;
+        public static final double MA_KOutClamp = 0;
+        public static double MA_cycleRate = 20; //update time pid
+        public static final int MA_DR_StandbyMode = 1;
+         */
+
+
 
     }
 
+    //variables that specify calibration values for drive train
     public static final class DriveTrain{
 
         //PID STUFF
-        public static double Kp = 0.0;
+        public static double Kp = 0.018;
         public static double Ki = 0;
-        public static double Kd = 0.0;
+        public static double Kd = 0.03;
         public static double KiClamp = 0;
         public static double KOutClamp = 0;
 
