@@ -1,35 +1,42 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
-import com.arcrobotics.ftclib.gamepad.GamepadEx;
-import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.subsystems.MotionControl.CubicSplineInterpolator;
+import org.firstinspires.ftc.teamcode.subsystems.MotionControl.MotionProfile;
+import org.firstinspires.ftc.teamcode.subsystems.MotionControl.MotionState;
+import org.firstinspires.ftc.teamcode.subsystems.MotionControl.Point;
 import org.firstinspires.ftc.teamcode.subsystems.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
 import org.firstinspires.ftc.teamcode.subsystems.Functions;
+import org.firstinspires.ftc.teamcode.subsystems.GamePad;
 import org.firstinspires.ftc.teamcode.subsystems.Motors;
-import org.firstinspires.ftc.teamcode.subsystems.PeriodicScheduler;
+import org.firstinspires.ftc.teamcode.subsystems.SubsystemCore.PeriodicScheduler;
 
-
+import java.util.ArrayList;
 
 
 @TeleOp
 public class Main1 extends OpMode {
 
     private DriveTrain driveTrain;
-    private GamepadEx gamepadEx;
     private Motors motorLift;
+
+    FtcDashboard dashboard = FtcDashboard.getInstance();  //declaration dashboard
+    Telemetry dashboardTelemetry = dashboard.getTelemetry(); //declaration dashboard
 
     //when INT is hit, run once
     @Override
     public void init() {
         // Initialize class-level driveTrain and gamepadEx
         driveTrain = new DriveTrain(hardwareMap);  // Don't redeclare with 'DriveTrain' keyword
-        motorLift = new Motors(hardwareMap, Constants.Motors.MotorLift, Constants.Motors.MotorB5202312crp, Constants.Motors.MotorB5202312rpm, Constants.Motors.ML_DR_StandbyMode);
         PeriodicScheduler.register(driveTrain);
-        gamepadEx = new GamepadEx(gamepad1);  // Initialize class-level gamepadEx
+        new GamePad(gamepad1,gamepad2);
+
+
     }
 
 
@@ -42,6 +49,34 @@ public class Main1 extends OpMode {
     //run once, once start is pressed
     @Override
     public void start() {
+        ArrayList<Point> controlPoints = new ArrayList<>();
+        controlPoints.add(new Point(0, 0, 0));
+        controlPoints.add(new Point(2, 10, 0));
+        controlPoints.add(new Point(4, 3, 0));
+        controlPoints.add(new Point(10, 15, 0));
+        controlPoints.add(new Point(11, 4, 0));
+        controlPoints.add(new Point(11.1, 4.1, 0));
+
+        // Create a cubic spline interpolator
+        CubicSplineInterpolator cubicInterpolator = new CubicSplineInterpolator(controlPoints);
+
+        // Interpolate points along the cubic spline with a resolution of 0.1
+        ArrayList<Point> interpolatedPoints = cubicInterpolator.interpolate(0.2);
+
+        // Create the motion profile generator
+        MotionProfile motionProfile = new MotionProfile(1.0, 0.5, 0.02);  // Max speed 1 m/s, max accel 0.5 m/s^2
+
+        // Generate the motion profile based on the interpolated points
+        ArrayList<MotionState> profile = motionProfile.generateProfile(interpolatedPoints);
+
+        // Print the motion profile
+        for (MotionState state : profile) {
+            dashboardTelemetry.addData("Interpolation", state);
+            dashboardTelemetry.update();
+        }
+
+
+
     }
 
     //made code loop, run everything here
@@ -50,26 +85,22 @@ public class Main1 extends OpMode {
         PeriodicScheduler.runPeriodically();
 
         //controller input management
-        double LSY = -Functions.DeadZone(gamepadEx.getLeftY(), Constants.Controllers.controllerDeadZone);
-        double LSX = Functions.DeadZone(gamepadEx.getLeftX(), Constants.Controllers.controllerDeadZone); //gets each controller's inputs
-        double RSY = -Functions.Exponential(Functions.DeadZone(gamepadEx.getRightY(), Constants.Controllers.controllerDeadZone));
-        double RSX = Functions.Exponential(Functions.DeadZone(gamepadEx.getRightX(), Constants.Controllers.controllerDeadZone));
+        double LSY = -Functions.DeadZone(GamePad.c1.getLY(), Constants.Controllers.controllerDeadZone);
+        double LSX = Functions.DeadZone(GamePad.c1.getLX(), Constants.Controllers.controllerDeadZone); //gets each controller's inputs
+        double RSY = -Functions.DeadZone(GamePad.c1.getRY(), Constants.Controllers.controllerDeadZone);
+        double RSX = Functions.DeadZone(GamePad.c1.getRX(), Constants.Controllers.controllerDeadZone);
 
         //driveTrain.directDrive(LSY, LSX, RSY, RSX);
         driveTrain.FieldOrientDrive(LSY, LSX, RSY, RSX, false, 0);
 
-        if (gamepadEx.getButton(GamepadKeys.Button.RIGHT_BUMPER)){ driveTrain.resetYaw();}
-
-        if (gamepadEx.getButton(GamepadKeys.Button.A)) {
-
-            motorLift.set(-1);
-
-        }else if (gamepadEx.getButton(GamepadKeys.Button.B)){
-
-            motorLift.set(1);
-        }else {
-            motorLift.set(0);
+        if (GamePad.c1.getRB()){
+            driveTrain.resetYaw();
         }
+
+
+
+
+
     }
 
     //Once stop is pressed run this once

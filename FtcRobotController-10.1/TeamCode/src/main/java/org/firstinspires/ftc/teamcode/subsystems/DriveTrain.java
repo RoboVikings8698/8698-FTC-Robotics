@@ -11,16 +11,19 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.teamcode.subsystems.MotionControl.MotionControllers;
+import org.firstinspires.ftc.teamcode.subsystems.SubsystemCore.Periodic;
+import org.firstinspires.ftc.teamcode.subsystems.SubsystemCore.PeriodicScheduler;
 
-public class DriveTrain  extends Periodic{
+public class DriveTrain  extends Periodic {
 
-    //mototor declaration
+    //motor declaration
     private Motors motor_1, motor_2, motor_3, motor_4;
     private IMU imu; //gyro stuff
     private RevHubOrientationOnRobot orientationOnRobot; //gyro stuff
 
-    private Controllers PID; //declare PID
-    public Controllers.AngularPID posPID; //declare position PI// D
+    private MotionControllers PID; //declare PID
+    public MotionControllers.AngularPID posPID; //declare position PI// D
 
     double RSAngle = 0;
 
@@ -38,7 +41,7 @@ public class DriveTrain  extends Periodic{
         super(10, 5);  //
 
         //pid initialization stuff
-        PID = new Controllers();
+        PID = new MotionControllers();
         posPID = PID.new AngularPID(Constants.DriveTrain.Kp, Constants.DriveTrain.Ki, Constants.DriveTrain.Kd, Constants.DriveTrain.KiClamp, Constants.DriveTrain.KOutClamp);
 
         //create motor objects and hardwareMap them
@@ -86,16 +89,24 @@ public class DriveTrain  extends Periodic{
 
         double yawComp = 0;
 
-        //getting bearing degree from controllers
-        double LSAngle = Constants.Controllers.FTCjoystick360LEFT(Constants.Controllers.getJoyStickAngleDegree(LSvx,LSvy)); //Calculating angle from vector and converting to 360 bearing
-        RSAngle = Constants.Controllers.FTCjoystick360RIGHT(Constants.Controllers.getJoyStickAngleDegree(RSvx,RSvy)); //Calculating angle from vector and converting to 360 bearing
-
         //getting joystick magnitude
         double LSMagnitude = Functions.VectorMagnitude(LSvy, LSvx); //find magnitude of the vector
         double RSMagnitude = Functions.VectorMagnitude(RSvy,RSvx); //find magnitude of the vector
 
+        //getting bearing degree from controllers
+        double LSAngle = Constants.Controllers.FTCjoystick360LEFT(Constants.Controllers.getJoyStickAngleDegree(LSvx,LSvy)); //Calculating angle from vector and converting to 360 bearing
+        RSAngle = Constants.Controllers.FTCjoystick360RIGHT(Constants.Controllers.getJoyStickAngleDegree(RSvx,RSvy)); //Calculating angle from vector and converting to 360 bearing
+
+
+        //this code disables driver yaw input if yaw override is off, also serves as initial yaw stabilized to prevent
+        //robot from jerking, since now default stating degree of joystick is in the middle is 0.
         if(YawOverride){
             posPID.setNewAngle(Yaw);//new "mission" for PID
+            yawComp = posPID.getPidOut();
+            RSMagnitude = 1;
+
+        }else if(RSMagnitude == 0){
+            //do nothing
         }else{
             posPID.setNewAngle(RSAngle);//new "mission" for PID
             yawComp = posPID.getPidOut(); //save calculated PId output

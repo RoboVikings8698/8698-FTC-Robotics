@@ -6,8 +6,10 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.subsystems.MotionControl.MotionControllers;
+import org.firstinspires.ftc.teamcode.subsystems.SubsystemCore.Periodic;
 
-public class Motors extends Periodic{
+public class Motors extends Periodic {
 
     //create motor instances
     //motor itself
@@ -16,9 +18,10 @@ public class Motors extends Periodic{
     //encoder stuff
     private Motor.Encoder encoder;
     //pid controller
-    private Controllers PID;
+    private MotionControllers PID;
     //position pid, also possible to use velocity pid
-    public Controllers.PositionPID pid;
+    public MotionControllers.PositionPID pid_p;
+    public MotionControllers.VelocityPID pid_v;
 
     //dash board stuff
     FtcDashboard dashboard = FtcDashboard.getInstance();
@@ -30,8 +33,9 @@ public class Motors extends Periodic{
         //set periodic rate, 10ms
         super((long)PID_cycle, 0);
         //PID stuff, skip it
-        PID = new Controllers();
-        pid = PID.new PositionPID(kp, ki, kd, kiclamp, koutClamp);
+        PID = new MotionControllers();
+        pid_p = PID.new PositionPID(kp, ki, kd, kiclamp, koutClamp);
+        pid_v = PID.new VelocityPID(kp, ki, kd, kiclamp, koutClamp);
 
 
 
@@ -97,7 +101,9 @@ public class Motors extends Periodic{
     //PID controlled
     public void setPosition(double setpoint)
     {
-        pid.setNewPoint(setpoint);
+        pid_p.setNewPoint(setpoint);
+        pid_v.setNewVel(setpoint);
+
     }
 
 
@@ -108,8 +114,8 @@ public class Motors extends Periodic{
     public void periodic() {
 
         if(Constants.Motors.DT_PID_Enable) {
-            pid.calculatePID(getPosition());
-            set(pid.getPidOut());
+            pid_p.calculatePID(getPosition());
+            set(pid_p.getPidOut());
        }
     }
 

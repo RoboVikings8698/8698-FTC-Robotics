@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.subsystems;
+package org.firstinspires.ftc.teamcode.subsystems.SubsystemCore;
 public abstract class Periodic {
     private long lastRunTime = 0; //saves last time periodic was run
     private long periodMs;  //frequency of running

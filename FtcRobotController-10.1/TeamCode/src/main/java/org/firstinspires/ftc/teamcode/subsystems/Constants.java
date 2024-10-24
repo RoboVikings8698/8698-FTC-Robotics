@@ -41,15 +41,6 @@ public final class Constants {
         public static final int MA_DR_StandbyMode = 1;
          */
 
-        public static final String MotorLift = "motorLift";
-        public static final boolean MotorLift_PID_Enable = false;
-        public static final double ML_Kp = 0;
-        public static final double ML_Ki = 0;
-        public static final double ML_Kd = 0;
-        public static final double ML_KiClamp = 0;
-        public static final double ML_KOutClamp = 0;
-        public static double ML_cycleRate = 20; //update time pid
-        public static final int ML_DR_StandbyMode = 0;
 
     }
 
@@ -67,7 +58,7 @@ public final class Constants {
 
     public static final class Controllers{
         //controllers dead zone compensation to prevent ghost movements
-        public static final double controllerDeadZone = 0.1;
+        public static final double controllerDeadZone = 0.05;
 
         public static double getJoyStickAngleDegree(double x, double y)
         {
@@ -102,8 +93,4 @@ public final class Constants {
 
 
     }
-
-
-
-
 }
