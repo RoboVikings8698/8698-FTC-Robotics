@@ -84,14 +84,7 @@ public class Main1 extends OpMode {
     public void loop() {
         PeriodicScheduler.runPeriodically();
 
-        //controller input management
-        double LSY = -Functions.DeadZone(GamePad.c1.getLY(), Constants.Controllers.controllerDeadZone);
-        double LSX = Functions.DeadZone(GamePad.c1.getLX(), Constants.Controllers.controllerDeadZone); //gets each controller's inputs
-        double RSY = -Functions.DeadZone(GamePad.c1.getRY(), Constants.Controllers.controllerDeadZone);
-        double RSX = Functions.DeadZone(GamePad.c1.getRX(), Constants.Controllers.controllerDeadZone);
-
-        //driveTrain.directDrive(LSY, LSX, RSY, RSX);
-        driveTrain.FieldOrientDrive(LSY, LSX, RSY, RSX, false, 0);
+        driveTrain.FieldOrientDrive(GamePad.c1.getDriveJoy(), false, 0);
 
         if (GamePad.c1.getRB()){
             driveTrain.resetYaw();

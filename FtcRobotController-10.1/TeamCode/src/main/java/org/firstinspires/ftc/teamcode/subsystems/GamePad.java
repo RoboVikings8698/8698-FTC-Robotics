@@ -5,11 +5,17 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 
+import org.firstinspires.ftc.teamcode.subsystems.MotionControl.Point;
+
+import java.util.ArrayList;
+
 
 public class GamePad {
 
     private static GamepadEx controller1;
     private static GamepadEx controller2;
+
+
 
     //create those controllers
     public GamePad(com.qualcomm.robotcore.hardware.Gamepad controller1, com.qualcomm.robotcore.hardware.Gamepad controller2) {
@@ -17,23 +23,45 @@ public class GamePad {
         GamePad.controller2 = new GamepadEx(controller2);
     }
 
-    public static class c1{
+    public static class c1 {
 
         //checking for active driver inputs
-        public static double getLX(){
+        public static double getLX() {
             return controller1.getLeftX();
         }
-        public static double getLY(){
+
+        public static double getLY() {
             return controller1.getLeftY();
 
         }
-        public static double getRX(){
+
+        public static double getRX() {
             return controller1.getRightX();
 
         }
-        public static double getRY(){
+
+        public static double getRY() {
             return controller1.getRightY();
 
+        }
+
+        public static ArrayList<Double> getDriveJoy(){
+            ArrayList<Double> DRcontrols = new ArrayList<>();
+
+            //LSX - 0, LSY - 1, RSX - 2, RSY - 3
+            double LSY = -Functions.DeadZone(getLY(), Constants.Controllers.controllerDeadZone);
+            double LSX = Functions.DeadZone(getLX(), Constants.Controllers.controllerDeadZone); //gets each controller's inputs
+            double RSY = -Functions.DeadZone(getRY(), Constants.Controllers.controllerDeadZone);
+            double RSX = Functions.DeadZone(getRX(), Constants.Controllers.controllerDeadZone);
+
+            DRcontrols.add(LSX);
+            DRcontrols.add(LSY);
+            DRcontrols.add(RSX);
+            DRcontrols.add(RSY);
+
+
+
+            return DRcontrols;
         }
 
         public static boolean getA(){

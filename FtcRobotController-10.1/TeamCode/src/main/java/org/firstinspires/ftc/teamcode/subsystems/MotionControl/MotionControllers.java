@@ -73,7 +73,7 @@ public class MotionControllers {
         }
     }
 
-    public class AngularPID{
+    public class AnglePID{
         //PID param
         private double Kp;
         private double Ki;
@@ -90,7 +90,7 @@ public class MotionControllers {
 
 
         //constructor when new PID controller created
-        public AngularPID(double kp, double ki, double kd, double kiclamp, double koutClamp) {
+        public AnglePID(double kp, double ki, double kd, double kiclamp, double koutClamp) {
             Kp = kp;
             Ki = ki;
             kiClamp = kiclamp;
@@ -197,8 +197,112 @@ public class MotionControllers {
         }
     }
 
-    public class CascadePID{
+    public class CascadePosVelPID{
 
+         private PositionPID PositionControl; //cascade involves position outer loop
+         private VelocityPID VelocityControl; //and velocity inner loop
+            private AnglePID AngleControl; //or position is replaced wth angular control
+
+         private double setAcceleration; //acceleration limit
+         private final double velUpdateLoopFactor;
+         private boolean angleControl;
+         private double pidOut;
+         public double desiredVelocity;
+         public double poutv;
+         private int i;
+
+
+         //cascade constructor, set all of the tuning values
+        public CascadePosVelPID(double pKp, double pKd, double vKp, double vKd, int velUpdateLoopFactor, boolean angleControl) {
+
+            PositionControl = new PositionPID(pKp, 0, pKd, 0, 1);
+            AngleControl = new AnglePID(vKp, 0, pKd, 0, 1);
+            VelocityControl = new VelocityPID(pKp, 0, vKd, 0, 1);
+
+            this.velUpdateLoopFactor = velUpdateLoopFactor;
+            this.angleControl = angleControl;
+
+        }
+
+        // Method to update controllers based on the current state
+        public void calculatePID(double currentPos, double currentVel) {
+
+            //double desiredVelocity;
+
+            if(velUpdateLoopFactor > i){
+
+
+                //calculate positional PID, chooses between angle and position pid
+               if(angleControl)
+                {
+                    AngleControl.calculatePID(currentPos);
+                    desiredVelocity = AngleControl.getPidOut();
+                    //if(AngleControl.getPidOut() < 0) {currentVelocity = currentVelocity*-1;}
+                    i = 0;
+
+
+                }else {
+                    //PositionControl.calculatePID(currentPos);
+                    //desiredVelocity = PositionControl.getPidOut();
+                    //i = 0;
+                    //if(PositionControl.getPidOut() < 0) {currentVelocity = currentVelocity*-1;}
+                }
+
+
+            }else{
+                    desiredVelocity = PositionControl.getPidOut();
+                    ++i;
+            }
+
+
+
+            //Apply acceleration limits
+            //desiredVelocity = limitAcceleration(desiredVelocity, currentVel);
+
+            //calculate velocity PID
+            VelocityControl.calculatePID(desiredVelocity);
+
+
+            //save pid output
+            pidOut = VelocityControl.getPidOut();
+        }
+
+        //Acceleration limit
+        private double limitAcceleration(double desiredVelocity, double currentVelocity) {
+
+            double MAXvelRateOfChange = setAcceleration;
+            double velocityChange = desiredVelocity - currentVelocity;
+
+            // Limit the change in velocity to the maximum allowed
+            if (Math.abs(velocityChange) > MAXvelRateOfChange) {
+                if (velocityChange > 0) {
+                    desiredVelocity = currentVelocity + MAXvelRateOfChange;
+                } else {
+                    desiredVelocity = currentVelocity - MAXvelRateOfChange;
+                }
+            }
+
+            return desiredVelocity;
+        }
+
+        //set new target
+        public void setNewTarget(double newPos, double newVel, double newAcc) {
+            PositionControl.setNewPoint(newPos);
+            AngleControl.setNewAngle(newPos);
+            VelocityControl.setNewVel(newVel);
+            this.setAcceleration = newAcc;
+        }
+
+        //pid tuning
+        public void tunePID(double pKp, double pKd, double vKp, double vKd){
+            PositionControl.tunePID(pKp, 0, pKd);
+            AngleControl.tunePID(pKp, 0, pKd);
+            VelocityControl.tunePID(vKp, 0, vKd);
+        }
+
+        public double getPIDout(){
+            return pidOut;
+        }
 
     }
 

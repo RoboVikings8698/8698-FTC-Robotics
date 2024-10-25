@@ -86,16 +86,19 @@ public class CubicSplineInterpolator {
         ArrayList<Point> interpolatedPoints = new ArrayList<>();
 
         for (int i = 0; i < n; i++) {
-            for (double t = x[i]; t <= x[i + 1]; t += resolution) {
+            for (double t = x[i]; t < x[i + 1]; t += resolution) {  // Notice the < condition here
                 double delta = t - x[i];
                 double interpolatedX = t;
                 double interpolatedY = a[i] + b[i] * delta + c[i] * delta * delta + d[i] * delta * delta * delta;
 
-                // For this example, we'll just assume the bearing angle (theta) stays constant
-                interpolatedPoints.add(new Point(interpolatedX, interpolatedY, 0));  // Assuming a constant theta
+                interpolatedPoints.add(new Point(interpolatedX, interpolatedY, 0));
             }
         }
 
+        // Manually add the last control point
+        interpolatedPoints.add(new Point(x[n], a[n], 0));  // Add the last point
+
         return interpolatedPoints;
     }
+
 }
