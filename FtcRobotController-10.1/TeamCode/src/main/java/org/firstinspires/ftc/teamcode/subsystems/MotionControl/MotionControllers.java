@@ -49,8 +49,9 @@ public class MotionControllers {
             double delta_error = error - oldError; //finding derivative
 
             pidOut = -Kp * error + -Ki * accumulatedError + -Kd * delta_error; //main pid math
-            pidOut = Functions.Clamp(pidOut, -kClampOut, kClampOut); //final result is clamped, which is basically velocity limit, voltage and speed are proportional
-
+            if(kClampOut > -1) {
+                pidOut = Functions.Clamp(pidOut, -kClampOut, kClampOut); //final result is clamped, which is basically velocity limit, voltage and speed are proportional
+            }
             oldError = error; //update var for next cycle
         }
 
@@ -109,8 +110,9 @@ public class MotionControllers {
             double delta_error = error - oldError;
 
             pidOut = -Kp * error + -Ki * accumulatedError + -Kd * delta_error; //main pid math
-            pidOut = Functions.Clamp(pidOut, -kClampOut, kClampOut); //final result is clamped, which is basically velocity limit, voltage and speed are proportional
-
+            if(kClampOut > -1) {
+                pidOut = Functions.Clamp(pidOut, -kClampOut, kClampOut); //final result is clamped, which is basically velocity limit, voltage and speed are proportional
+            }
             oldError = error; //update var for next cycle
         }
 
@@ -174,8 +176,10 @@ public class MotionControllers {
             double delta_error = error - oldError;
 
             pidOut = -Kp * error + -Ki * accumulatedError + -Kd * delta_error; //main pid math
-            pidOut = Functions.Clamp(pidOut, -kClampOut, kClampOut); //final result is clamped, which is basically velocity limit, voltage and speed are proportional
 
+            if(kClampOut > -1) {
+                pidOut = Functions.Clamp(pidOut, -kClampOut, kClampOut); //final result is clamped, which is basically velocity limit, voltage and speed are proportional
+            }
             oldError = error; //update var for next cycle
         }
 
@@ -201,23 +205,22 @@ public class MotionControllers {
 
          private PositionPID PositionControl; //cascade involves position outer loop
          private VelocityPID VelocityControl; //and velocity inner loop
-            private AnglePID AngleControl; //or position is replaced wth angular control
+        private AnglePID AngleControl; //or position is replaced wth angular control
 
          private double setAcceleration; //acceleration limit
          private final double velUpdateLoopFactor;
          private boolean angleControl;
-         private double pidOut;
-         public double desiredVelocity;
-         public double poutv;
+         private double pidOut = 0;
+         public double desiredVelocity = 0;
          private int i;
 
 
          //cascade constructor, set all of the tuning values
         public CascadePosVelPID(double pKp, double pKd, double vKp, double vKd, int velUpdateLoopFactor, boolean angleControl) {
 
-            PositionControl = new PositionPID(pKp, 0, pKd, 0, 1);
-            AngleControl = new AnglePID(vKp, 0, pKd, 0, 1);
-            VelocityControl = new VelocityPID(pKp, 0, vKd, 0, 1);
+            PositionControl = new PositionPID(pKp, 0, pKd, 0, -1);
+            AngleControl = new AnglePID(vKp, 0, pKd, 0, -1);
+            VelocityControl = new VelocityPID(vKp, 0, vKd, 0, 1);
 
             this.velUpdateLoopFactor = velUpdateLoopFactor;
             this.angleControl = angleControl;
@@ -227,9 +230,9 @@ public class MotionControllers {
         // Method to update controllers based on the current state
         public void calculatePID(double currentPos, double currentVel) {
 
-            //double desiredVelocity;
 
-            if(velUpdateLoopFactor > i){
+            //check if we need to run position loop or angular loop, if i is larger or equal run this if statment
+            if(i >= velUpdateLoopFactor){
 
 
                 //calculate positional PID, chooses between angle and position pid
@@ -237,20 +240,15 @@ public class MotionControllers {
                 {
                     AngleControl.calculatePID(currentPos);
                     desiredVelocity = AngleControl.getPidOut();
-                    //if(AngleControl.getPidOut() < 0) {currentVelocity = currentVelocity*-1;}
                     i = 0;
-
-
                 }else {
-                    //PositionControl.calculatePID(currentPos);
-                    //desiredVelocity = PositionControl.getPidOut();
-                    //i = 0;
-                    //if(PositionControl.getPidOut() < 0) {currentVelocity = currentVelocity*-1;}
+                    PositionControl.calculatePID(currentPos);
+                    desiredVelocity = PositionControl.getPidOut();
+                    i = 0;
                 }
 
 
             }else{
-                    desiredVelocity = PositionControl.getPidOut();
                     ++i;
             }
 
@@ -259,12 +257,13 @@ public class MotionControllers {
             //Apply acceleration limits
             //desiredVelocity = limitAcceleration(desiredVelocity, currentVel);
 
-            //calculate velocity PID
-            VelocityControl.calculatePID(desiredVelocity);
+            //calculate velocity PID, when tuning, increase vkp value and rotate robot, wheels should immediately start rotating and oppose robot movement.
+            VelocityControl.setNewVel(desiredVelocity);
+            VelocityControl.calculatePID(currentVel);
 
 
             //save pid output
-            pidOut = VelocityControl.getPidOut();
+            pidOut = -VelocityControl.getPidOut();
         }
 
         //Acceleration limit
@@ -286,10 +285,9 @@ public class MotionControllers {
         }
 
         //set new target
-        public void setNewTarget(double newPos, double newVel, double newAcc) {
+        public void setNewTarget(double newPos, double newAcc) {
             PositionControl.setNewPoint(newPos);
             AngleControl.setNewAngle(newPos);
-            VelocityControl.setNewVel(newVel);
             this.setAcceleration = newAcc;
         }
 
