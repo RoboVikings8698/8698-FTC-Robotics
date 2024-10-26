@@ -26,11 +26,10 @@ public class DriveTrain  extends Periodic {
     private RevHubOrientationOnRobot orientationOnRobot; //gyro stuff
 
     private MotionControllers PID; //declare PID
-    //public MotionControllers.AnglePID posPID; //declare position PI// D
-    public MotionControllers.CascadePosVelPID posPID;
+    public MotionControllers.AnglePID posPID; //declare position PI// D
 
     double RSAngle = 0;
-    private double alpha = 0.1; // Smoothing factor
+    private double alpha = 1; // Smoothing factor
     private double filteredYawVel = 0; // Variable to hold the filtered value
     double yawComp = 0;
 
@@ -45,13 +44,11 @@ public class DriveTrain  extends Periodic {
 
     //constructor, called once object is created
     public DriveTrain(HardwareMap hardwareMap){
-        super(10, 5);  //
+        super(5, 5);  //
 
         //pid initialization stuff
         PID = new MotionControllers();
-        //posPID = PID.new AnglePID(Constants.DriveTrain.Kp, Constants.DriveTrain.Ki, Constants.DriveTrain.Kd, Constants.DriveTrain.KiClamp, Constants.DriveTrain.KOutClamp);
-        posPID = PID.new CascadePosVelPID(0,0, 0.5,0,4,true);
-        //create motor objects and hardwareMap them
+        posPID = PID.new AnglePID(Constants.DriveTrain.Kp, Constants.DriveTrain.Ki, Constants.DriveTrain.Kd, Constants.DriveTrain.KiClamp, Constants.DriveTrain.KOutClamp);
         motor_1 = new Motors(hardwareMap, Constants.Motors.Motor1, Constants.Motors.MotorB5202312crp, Constants.Motors.MotorB5202312rpm, Constants.Motors.DT_StandbyMode);
         motor_2 = new Motors(hardwareMap, Constants.Motors.Motor2, Constants.Motors.MotorB5202312crp, Constants.Motors.MotorB5202312rpm, Constants.Motors.DT_StandbyMode);
         motor_3 = new Motors(hardwareMap, Constants.Motors.Motor3, Constants.Motors.MotorB5202312crp, Constants.Motors.MotorB5202312rpm, Constants.Motors.DT_StandbyMode);
@@ -150,26 +147,24 @@ public class DriveTrain  extends Periodic {
         RSAngle = Constants.Controllers.FTCjoystick360RIGHT(Constants.Controllers.getJoyStickAngleDegree(RSvx,RSvy)); //Calculating angle from vector and converting to 360 bearing
 
 
-       /* //this code disables driver yaw input if yaw override is off, also serves as initial yaw stabilized to prevent
+       //this code disables driver yaw input if yaw override is off, also serves as initial yaw stabilized to prevent
         //robot from jerking, since now default stating degree of joystick is in the middle is 0.
         if(YawOverride){
-            //posPID.setNewAngle(Yaw);//new "mission" for PID
-            posPID.setNewTarget(Yaw, 1);
-            //yawComp = posPID.getPidOut();
-            yawComp = posPID.getPIDout();
+            posPID.setNewAngle(Yaw);//new "mission" for PID
+
+            yawComp = posPID.getPidOut();
+
             RSMagnitude = 1;
 
         }else if(RSMagnitude == 0){
             //do nothing
         }else{
-            //posPID.setNewAngle(RSAngle);//new "mission" for PID
-            posPID.setNewTarget(RSAngle,1);
-            //yawComp = posPID.getPidOut(); //save calculated PId output
-            yawComp = posPID.getPIDout();
-        }*/
+            posPID.setNewAngle(RSAngle);//new "mission" for PID
 
-        posPID.setNewTarget(RSAngle,1);
-        yawComp = posPID.getPIDout();
+            yawComp = posPID.getPidOut(); //save calculated PId output
+
+        }
+
 
 
 
@@ -218,16 +213,13 @@ public class DriveTrain  extends Periodic {
     public void periodic() {
         //calling pid every now on
         //posPID.calculatePID(getYaw()); //calculate pid, +90 added to compensate for joystick offset from bearing
-        posPID.calculatePID(getYaw(),getYawVel());
+        posPID.calculatePID(getYaw());
         dashboardTelemetry.addData("gro", getYaw());
         dashboardTelemetry.addData("pid vel", getYawVel());
-        //dashboardTelemetry.addData("pid out", posPID.getPidOut());
-        dashboardTelemetry.addData("pid out", posPID.getPIDout());
-        dashboardTelemetry.addData("pid position", posPID.desiredVelocity);
+        dashboardTelemetry.addData("pid out", posPID.getPidOut());
+
 
         dashboardTelemetry.addData("pidOUT123", yawComp);
-        alpha = Dashboard.DriveTrain.filt;
-        posPID.tunePID(Dashboard.DriveTrain.pKp,Dashboard.DriveTrain.pKd,Dashboard.DriveTrain.vKp,Dashboard.DriveTrain.vKd);
         dashboardTelemetry.update();
     }
 

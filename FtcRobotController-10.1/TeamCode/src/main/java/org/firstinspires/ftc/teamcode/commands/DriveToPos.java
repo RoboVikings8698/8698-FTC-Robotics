@@ -14,7 +14,7 @@ public class DriveToPos {
     //complex cubic interpolation or linear interpolation with feedback drive to position
     public class PathPlaner{
 
-        PathPlaner(){
+        PathPlaner(int selectPATH){
 
         }
 

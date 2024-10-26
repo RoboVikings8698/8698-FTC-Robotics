@@ -220,7 +220,7 @@ public class MotionControllers {
 
             PositionControl = new PositionPID(pKp, 0, pKd, 0, -1);
             AngleControl = new AnglePID(vKp, 0, pKd, 0, -1);
-            VelocityControl = new VelocityPID(vKp, 0, vKd, 0, 1);
+            VelocityControl = new VelocityPID(vKp, 0, vKd, 1, 1);
 
             this.velUpdateLoopFactor = velUpdateLoopFactor;
             this.angleControl = angleControl;
@@ -292,10 +292,10 @@ public class MotionControllers {
         }
 
         //pid tuning
-        public void tunePID(double pKp, double pKd, double vKp, double vKd){
-            PositionControl.tunePID(pKp, 0, pKd);
+        public void tunePID(double pKp, double pKd, double vKp, double vKi){
+            PositionControl.tunePID(pKp, 0, 0);
             AngleControl.tunePID(pKp, 0, pKd);
-            VelocityControl.tunePID(vKp, 0, vKd);
+            VelocityControl.tunePID(vKp, vKi, 0);
         }
 
         public double getPIDout(){
