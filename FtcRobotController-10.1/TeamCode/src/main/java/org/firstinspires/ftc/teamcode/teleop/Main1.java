@@ -32,7 +32,7 @@ public class Main1 extends OpMode {
     @Override
     public void init() {
         // Initialize class-level driveTrain and gamepadEx
-        driveTrain = new DriveTrain(hardwareMap);  // Don't redeclare with 'DriveTrain' keyword
+        driveTrain = new DriveTrain(hardwareMap, Constants.DriveTrain.time);  // Don't redeclare with 'DriveTrain' keyword
         PeriodicScheduler.register(driveTrain);
         new GamePad(gamepad1,gamepad2);
 

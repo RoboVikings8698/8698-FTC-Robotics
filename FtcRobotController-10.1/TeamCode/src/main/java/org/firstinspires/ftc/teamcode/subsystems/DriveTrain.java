@@ -22,39 +22,56 @@ public class DriveTrain  extends Periodic {
 
     //motor declaration
     private Motors motor_1, motor_2, motor_3, motor_4;
-    private IMU imu; //gyro stuff
+    //gyro stuff
+    private IMU imu;
     private RevHubOrientationOnRobot orientationOnRobot; //gyro stuff
-
-    private MotionControllers PID; //declare PID
-    public MotionControllers.AnglePID posPID; //declare position PI// D
-
-    double RSAngle = 0;
-    private double alpha = 1; // Smoothing factor
-    private double filteredYawVel = 0; // Variable to hold the filtered value
-    double yawComp = 0;
-
     //dash board stuff
     FtcDashboard dashboard = FtcDashboard.getInstance();  //declaration dashboard
     Telemetry dashboardTelemetry = dashboard.getTelemetry(); //declaration dashboard
 
 
+    //motion controllers
+    private MotionControllers PID; //declare PID
+    public MotionControllers.AnglePID posPID; //declare position PI// D
+
+
+    //EXPERIMENTAL
+    public MotionControllers.CascadePosVelPID cascadPID;
+
+
+
+    //Active Variables, some used for dashboard telemetry
+    double RSAngle = 0;
+    private double alpha = 1; // Smoothing factor
+    private double filteredYawVel = 0; // Variable to hold the filtered value
+    double yawComp = 0;
 
 
 
 
-    //constructor, called once object is created
-    public DriveTrain(HardwareMap hardwareMap){
-        super(5, 5);  //
 
-        //pid initialization stuff
+
+
+
+    //Constructor, creates drivetrain, initializes variables and motor objects
+    public DriveTrain(HardwareMap hardwareMap, int time){
+
+        //set update period for periodic function
+        super(time, 5);
+
+        //PID initialization//
         PID = new MotionControllers();
+        //sets the default pid gains from constants, can be later updated through Dashboard variables
         posPID = PID.new AnglePID(Constants.DriveTrain.Kp, Constants.DriveTrain.Ki, Constants.DriveTrain.Kd, Constants.DriveTrain.KiClamp, Constants.DriveTrain.KOutClamp);
+
+
+        //motor declaration and initialization
         motor_1 = new Motors(hardwareMap, Constants.Motors.Motor1, Constants.Motors.MotorB5202312crp, Constants.Motors.MotorB5202312rpm, Constants.Motors.DT_StandbyMode);
         motor_2 = new Motors(hardwareMap, Constants.Motors.Motor2, Constants.Motors.MotorB5202312crp, Constants.Motors.MotorB5202312rpm, Constants.Motors.DT_StandbyMode);
         motor_3 = new Motors(hardwareMap, Constants.Motors.Motor3, Constants.Motors.MotorB5202312crp, Constants.Motors.MotorB5202312rpm, Constants.Motors.DT_StandbyMode);
         motor_4 = new Motors(hardwareMap, Constants.Motors.Motor4, Constants.Motors.MotorB5202312crp, Constants.Motors.MotorB5202312rpm, Constants.Motors.DT_StandbyMode);
 
-        //GYRO STUFF
+        //Gyro Initialization
         imu = hardwareMap.get(IMU.class, "imu");
         //mounting configuration
         double xRotation = 0;  // enter the desired X rotation angle here.

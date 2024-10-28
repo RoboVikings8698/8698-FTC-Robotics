@@ -47,12 +47,17 @@ public final class Constants {
     //variables that specify calibration values for drive train
     public static final class DriveTrain{
 
-        //PID STUFF
+        //Constants
+        public static int time = 10; //update loop for driveTrain
+
+        //PID gains
         public static double Kp = 0.018;
         public static double Ki = 0;
         public static double Kd = 0.03;
         public static double KiClamp = 0;
         public static double KOutClamp = 1;
+
+        //
 
     }
 
