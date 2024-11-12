@@ -193,6 +193,19 @@ public class DriveTrain  extends Periodic {
 
     }
 
+    public void FieldOrientedDriveAuto(double mg, double drYaw, double faceYaw){
+
+        posPID.setNewAngle(faceYaw);//new "mission" for PID
+
+        yawComp = posPID.getPidOut();
+
+        //motor stuff, basically, take left joystick vector break it into degrees and magnitude, compensate for motor offset and feed into motors. Also multiply pid out to prevent robot from keeping yaw position while zero feed from driver
+        motor_1.set(-(mg*Math.cos(Math.toRadians(drYaw-getYaw()))) + mg*Math.sin(Math.toRadians(drYaw-getYaw())) - yawComp);
+        motor_2.set((mg*Math.cos(Math.toRadians(drYaw-getYaw()))) + mg*Math.sin(Math.toRadians(drYaw-getYaw())) -  yawComp);
+        motor_3.set(-(mg*Math.cos(Math.toRadians(drYaw-getYaw()))) - mg*Math.sin(Math.toRadians(drYaw-getYaw())) - yawComp);
+        motor_4.set((mg*Math.cos(Math.toRadians(drYaw-getYaw()))) - mg*Math.sin(Math.toRadians(drYaw-getYaw())) -  yawComp);
+
+    }
 
     //getting robot yaw.
     public double getYaw()
@@ -201,6 +214,7 @@ public class DriveTrain  extends Periodic {
         return orientation.getYaw(AngleUnit.DEGREES);
     };
 
+    //get Yaw velocity displacement
     public double getYawVel() {
         AngularVelocity angularVelocity = imu.getRobotAngularVelocity(AngleUnit.DEGREES);
 
@@ -209,7 +223,6 @@ public class DriveTrain  extends Periodic {
 
         return filteredYawVel;
     }
-
 
 
     //resetting robot yaw

@@ -29,7 +29,7 @@ public final class Constants {
 
         //THE REST OF NON DRIVE TRAIN RELATED MOTORS ARE PLACED BELLOW
         //EXAMPLE FOR EACH MOTOR
-        /*
+
         public static final String MotorArm = "motorArm"; //SPECIFY MOTOR LOCATION From drive hub
         public static final boolean MotorArm_PID_Enable = false;
         public static final double MA_Kp = 0;
@@ -39,7 +39,7 @@ public final class Constants {
         public static final double MA_KOutClamp = 0;
         public static double MA_cycleRate = 20; //update time pid
         public static final int MA_DR_StandbyMode = 1;
-         */
+
 
 
     }

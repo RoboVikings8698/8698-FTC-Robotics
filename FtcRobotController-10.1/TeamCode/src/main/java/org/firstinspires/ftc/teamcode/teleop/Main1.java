@@ -33,6 +33,8 @@ public class Main1 extends OpMode {
     public void init() {
         // Initialize class-level driveTrain and gamepadEx
         driveTrain = new DriveTrain(hardwareMap, Constants.DriveTrain.time);  // Don't redeclare with 'DriveTrain' keyword
+        motorLift = new Motors(hardwareMap, Constants.Motors.MotorArm, , Constants.Motors.MA_cycleRate, Constants.Motors.MA_Kp, Constants.Motors.MA_Ki, Constants.Motors.MA_Kd, Constants.Motors.MA_KiClamp, Constants.Motors.MA_KOutClamp,  Constants.Motors.MotorB5202312crp, Constants.Motors.MotorB5202312rpm, Constants.Motors.MA_DR_StandbyMode);
+
         PeriodicScheduler.register(driveTrain);
         new GamePad(gamepad1,gamepad2);
 
@@ -49,31 +51,7 @@ public class Main1 extends OpMode {
     //run once, once start is pressed
     @Override
     public void start() {
-        ArrayList<Point> controlPoints = new ArrayList<>();
-        controlPoints.add(new Point(0, 0, 0));
-        controlPoints.add(new Point(2, 10, 0));
-        controlPoints.add(new Point(4, 3, 0));
-        controlPoints.add(new Point(10, 15, 0));
-        controlPoints.add(new Point(11, 4, 0));
-        controlPoints.add(new Point(11.1, 4.1, 0));
 
-        // Create a cubic spline interpolator
-        CubicSplineInterpolator cubicInterpolator = new CubicSplineInterpolator(controlPoints);
-
-        // Interpolate points along the cubic spline with a resolution of 0.1
-        ArrayList<Point> interpolatedPoints = cubicInterpolator.interpolate(0.2);
-
-        // Create the motion profile generator
-        MotionProfile motionProfile = new MotionProfile(1.0, 0.5, 0.02);  // Max speed 1 m/s, max accel 0.5 m/s^2
-
-        // Generate the motion profile based on the interpolated points
-        ArrayList<MotionState> profile = motionProfile.generateProfile(interpolatedPoints);
-
-        // Print the motion profile
-        for (MotionState state : profile) {
-            dashboardTelemetry.addData("Interpolation", state);
-            dashboardTelemetry.update();
-        }
 
 
 
