@@ -231,7 +231,7 @@ public class MotionControllers {
         public void calculatePID(double currentPos, double currentVel) {
 
 
-            //check if we need to run position loop or angular loop, if i is larger or equal run this if statement
+            //check if we need to run position loop or angular loop, if i is larger or equal run this if statment
             if(i >= velUpdateLoopFactor){
 
 
@@ -350,6 +350,36 @@ public class MotionControllers {
             }
 
             return V;
+        }
+
+        //calculates FF assuming guessed system model is linear and returns calculated voltage
+        public double calculateSimpleFF(double input){
+
+
+            if(input < 0){
+                dir = 1;
+            }else{
+                dir = -1;
+            }
+
+
+            switch(feedForward_type){
+                case 0:
+                    V = Ks * dir + Kv * Ref_velocity + Ka * Ref_acceleration;
+                    break;
+                case 1:
+                    V = Kg + Ks * dir + Kv * Ref_velocity + Ka * Ref_acceleration;
+                    break;
+                case 2:
+                    V = Kg*cos(theta) * Ks*dir + Kv * Ref_velocity + Ka * Ref_acceleration;
+                    break;
+
+                default:
+                    V = Ks * dir + Kv * Ref_velocity + Ka * Ref_acceleration;
+            }
+
+            return V;
+
         }
 
         // Placeholder for future advanced FF calculation

@@ -32,8 +32,12 @@ public class DriveTrain  extends Periodic {
 
     //motion controllers
     private MotionControllers PID; //declare PID
-    public MotionControllers.AnglePID posPID; //declare position PID
-    public MotionControllers.FeedForward FF;
+    public MotionControllers.AnglePID posPID; //declare position PI// D
+
+
+    //EXPERIMENTAL
+    public MotionControllers.CascadePosVelPID cascadPID;
+
 
 
     //Active Variables, some used for dashboard telemetry
@@ -59,7 +63,7 @@ public class DriveTrain  extends Periodic {
         PID = new MotionControllers();
         //sets the default pid gains from constants, can be later updated through Dashboard variables
         posPID = PID.new AnglePID(Constants.DriveTrain.Kp, Constants.DriveTrain.Ki, Constants.DriveTrain.Kd, Constants.DriveTrain.KiClamp, Constants.DriveTrain.KOutClamp);
-        FF = PID.new FeedForward(0, 0, 0,0,0);
+
 
         //motor declaration and initialization
         motor_1 = new Motors(hardwareMap, Constants.Motors.Motor1, Constants.Motors.MotorB5202312crp, Constants.Motors.MotorB5202312rpm, Constants.Motors.DT_StandbyMode);
@@ -148,8 +152,6 @@ public class DriveTrain  extends Periodic {
         double LSvy = DRcontrol.get(1);
         double RSvx = DRcontrol.get(2);
         double RSvy = DRcontrol.get(3);
-
-
 
         //double yawComp = 0;
 
