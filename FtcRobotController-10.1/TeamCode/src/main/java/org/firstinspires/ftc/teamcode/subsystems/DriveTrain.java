@@ -66,7 +66,7 @@ public class DriveTrain  extends Periodic {
 
 
         //motor declaration and initialization
-        motor_1 = new Motors(hardwareMap, Constants.Motors.Motor1, Constants.Motors.MotorB5202312crp, Constants.Motors.MotorB5202312rpm, Constants.Motors.DT_StandbyMode);
+        //motor_1 = new Motors(hardwareMap, Constants.Motors.Motor1, Constants.Motors.MotorB5202312crp, Constants.Motors.MotorB5202312rpm, Constants.Motors.DT_StandbyMode);
         motor_2 = new Motors(hardwareMap, Constants.Motors.Motor2, Constants.Motors.MotorB5202312crp, Constants.Motors.MotorB5202312rpm, Constants.Motors.DT_StandbyMode);
         motor_3 = new Motors(hardwareMap, Constants.Motors.Motor3, Constants.Motors.MotorB5202312crp, Constants.Motors.MotorB5202312rpm, Constants.Motors.DT_StandbyMode);
         motor_4 = new Motors(hardwareMap, Constants.Motors.Motor4, Constants.Motors.MotorB5202312crp, Constants.Motors.MotorB5202312rpm, Constants.Motors.DT_StandbyMode);

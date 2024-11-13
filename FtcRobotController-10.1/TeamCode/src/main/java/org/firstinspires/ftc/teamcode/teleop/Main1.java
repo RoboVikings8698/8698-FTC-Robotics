@@ -33,8 +33,6 @@ public class Main1 extends OpMode {
     public void init() {
         // Initialize class-level driveTrain and gamepadEx
         driveTrain = new DriveTrain(hardwareMap, Constants.DriveTrain.time);  // Don't redeclare with 'DriveTrain' keyword
-        motorLift = new Motors(hardwareMap, Constants.Motors.MotorArm, , Constants.Motors.MA_cycleRate, Constants.Motors.MA_Kp, Constants.Motors.MA_Ki, Constants.Motors.MA_Kd, Constants.Motors.MA_KiClamp, Constants.Motors.MA_KOutClamp,  Constants.Motors.MotorB5202312crp, Constants.Motors.MotorB5202312rpm, Constants.Motors.MA_DR_StandbyMode);
-
         PeriodicScheduler.register(driveTrain);
         new GamePad(gamepad1,gamepad2);
 

@@ -107,6 +107,12 @@ public class Motors extends Periodic {
     }
 
 
+    public void setPID(double kp,double kd){
+        pid_p.tunePID(kp, 0, kd);
+        pid_v.tunePID(kp, 0, kd);
+    }
+
+
 
 
 //this will run periodically if pid is used on that particular motor
@@ -114,8 +120,8 @@ public class Motors extends Periodic {
     public void periodic() {
 
         if(Constants.Motors.DT_PID_Enable) {
-            pid_p.calculatePID(getPosition());
-            set(pid_p.getPidOut());
+                pid_v.calculatePID(getPosition());
+                set(pid_v.getPidOut());
        }
     }
 
