@@ -43,7 +43,7 @@ public class MotionControllers {
         public void calculatePID(double InPut) {
             input = InPut;
             //some math
-            double error = setpoint - input;//error calculation
+            double error = input - setpoint;//error calculation
             accumulatedError += error; //ki calculation
             accumulatedError = Functions.Clamp(accumulatedError, -kiClamp, kiClamp); //ki clamp
             double delta_error = error - oldError; //finding derivative

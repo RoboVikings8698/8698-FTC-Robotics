@@ -35,11 +35,6 @@ public class DriveTrain  extends Periodic {
     public MotionControllers.AnglePID posPID; //declare position PI// D
 
 
-    //EXPERIMENTAL
-    public MotionControllers.CascadePosVelPID cascadPID;
-
-
-
     //Active Variables, some used for dashboard telemetry
     double RSAngle = 0;
     private double alpha = 1; // Smoothing factor
@@ -66,10 +61,14 @@ public class DriveTrain  extends Periodic {
 
 
         //motor declaration and initialization
-        //motor_1 = new Motors(hardwareMap, Constants.Motors.Motor1, Constants.Motors.MotorB5202312crp, Constants.Motors.MotorB5202312rpm, Constants.Motors.DT_StandbyMode);
-        motor_2 = new Motors(hardwareMap, Constants.Motors.Motor2, Constants.Motors.MotorB5202312crp, Constants.Motors.MotorB5202312rpm, Constants.Motors.DT_StandbyMode);
-        motor_3 = new Motors(hardwareMap, Constants.Motors.Motor3, Constants.Motors.MotorB5202312crp, Constants.Motors.MotorB5202312rpm, Constants.Motors.DT_StandbyMode);
-        motor_4 = new Motors(hardwareMap, Constants.Motors.Motor4, Constants.Motors.MotorB5202312crp, Constants.Motors.MotorB5202312rpm, Constants.Motors.DT_StandbyMode);
+        motor_1 = new Motors(hardwareMap, Constants.Motors.Motor1, Constants.Motors.MotorB5202312crp, Constants.Motors.MotorB5202312rpm);
+        motor_1.BreakMode();
+        motor_2 = new Motors(hardwareMap, Constants.Motors.Motor2, Constants.Motors.MotorB5202312crp, Constants.Motors.MotorB5202312rpm);
+        motor_2.BreakMode();
+        motor_3 = new Motors(hardwareMap, Constants.Motors.Motor3, Constants.Motors.MotorB5202312crp, Constants.Motors.MotorB5202312rpm);
+        motor_3.BreakMode();
+        motor_4 = new Motors(hardwareMap, Constants.Motors.Motor4, Constants.Motors.MotorB5202312crp, Constants.Motors.MotorB5202312rpm);
+        motor_4.BreakMode();
 
         //Gyro Initialization
         imu = hardwareMap.get(IMU.class, "imu");

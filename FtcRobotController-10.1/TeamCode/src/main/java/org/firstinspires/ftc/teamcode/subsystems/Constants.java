@@ -30,12 +30,10 @@ public final class Constants {
         //THE REST OF NON DRIVE TRAIN RELATED MOTORS ARE PLACED BELLOW
         //EXAMPLE FOR EACH MOTOR
 
-        public static final String test = "motor1"; //SPECIFY MOTOR LOCATION From drive hub
-        public static final boolean test_PID_Enable = true;
-        public static final double test_Kp = 1;
-        public static final double test_Kd = 0;
-        public static double test_cycleRate = 20; //update time pid
-        public static final int test_StandbyMode = 0;
+
+        //Motor Tuning
+        public static final String m_test = "motor1"; //SPECIFY MOTOR LOCATION From drive hub
+        public static double m_test_cycleRate = 20; //update time pid
 
 
 

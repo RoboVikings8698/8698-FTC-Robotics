@@ -5,48 +5,44 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.subsystems.MotionControl.CubicSplineInterpolator;
-import org.firstinspires.ftc.teamcode.subsystems.MotionControl.MotionProfile;
-import org.firstinspires.ftc.teamcode.subsystems.MotionControl.MotionState;
-import org.firstinspires.ftc.teamcode.subsystems.MotionControl.Point;
 import org.firstinspires.ftc.teamcode.subsystems.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
-import org.firstinspires.ftc.teamcode.subsystems.Functions;
 import org.firstinspires.ftc.teamcode.subsystems.GamePad;
 import org.firstinspires.ftc.teamcode.subsystems.Motors;
 import org.firstinspires.ftc.teamcode.subsystems.SubsystemCore.PeriodicScheduler;
 
-import java.util.ArrayList;
 
-
+//Main code
 @TeleOp
-public class Main1 extends OpMode {
+public class MainTeleop extends OpMode {
 
+    //objects
     private DriveTrain driveTrain;
-    private Motors motorLift;
 
+    //DashBoard
     FtcDashboard dashboard = FtcDashboard.getInstance();  //declaration dashboard
     Telemetry dashboardTelemetry = dashboard.getTelemetry(); //declaration dashboard
 
-    //when INT is hit, run once
+
+
+    //When Int pressed...
     @Override
     public void init() {
         // Initialize class-level driveTrain and gamepadEx
         driveTrain = new DriveTrain(hardwareMap, Constants.DriveTrain.time);  // Don't redeclare with 'DriveTrain' keyword
-        PeriodicScheduler.register(driveTrain);
+
         new GamePad(gamepad1,gamepad2);
 
-
+        //Should be placed on the bottom
+        PeriodicScheduler.register(driveTrain);
     }
 
-
-
-    //loop until start is pressed
+    //Loop until start pressed
     @Override
     public void init_loop() {
     }
 
-    //run once, once start is pressed
+    //When start pressed...
     @Override
     public void start() {
 
@@ -55,7 +51,7 @@ public class Main1 extends OpMode {
 
     }
 
-    //made code loop, run everything here
+    //While robot code is not stopped...
     @Override
     public void loop() {
         PeriodicScheduler.runPeriodically();
@@ -67,12 +63,9 @@ public class Main1 extends OpMode {
         }
 
 
-
-
-
     }
 
-    //Once stop is pressed run this once
+    //Once robot stopped...
     @Override
     public void stop() {
     }

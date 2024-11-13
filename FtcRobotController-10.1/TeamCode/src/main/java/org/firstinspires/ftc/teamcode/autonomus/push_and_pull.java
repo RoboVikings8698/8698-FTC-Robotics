@@ -37,12 +37,32 @@ public class push_and_pull extends OpMode{
         time = getRuntime();
 
 
-        if (time < 4) {
-            driveTrain.FieldOrientedDriveAuto(0.3, 0, 45);
+        if (time < 1.6 ) {
+            driveTrain.FieldOrientedDriveAuto(0.4, 90, 0);
         }
-        else if (time > 5 && time < 8){
+        else if (time > 2 && time < 4){
 
-            driveTrain.FieldOrientedDriveAuto(0.3, 180, 180);
+            driveTrain.FieldOrientedDriveAuto(0.4, 0, 0);
+        }
+        else if (time > 5 && time < 5.6){
+
+            driveTrain.FieldOrientedDriveAuto(0.4, 270, 0);
+        }
+        else if (time > 6 && time < 8){
+
+            driveTrain.FieldOrientedDriveAuto(0.4, 180, 0);
+        }
+        else if (time > 8 && time < 10){
+
+            driveTrain.FieldOrientedDriveAuto(0.4, 0, 0);
+        }
+        else if (time > 11 && time < 11.3){
+
+            driveTrain.FieldOrientedDriveAuto(0.4, 270, 0);
+        }
+        else if (time > 12 && time < 14){
+
+            driveTrain.FieldOrientedDriveAuto(0.4, 180, 0);
         }
         else {
             driveTrain.FieldOrientedDriveAuto(0, 0, 0);

@@ -43,9 +43,11 @@
     Periodic Functionj call, useful to call function periodic in any class that extends periodicm at specific rate
     //Create object of periodic of specified class
     PeriodicScheduler.register(driveTrain); //this is inside main in "int" for subsystems, and if you need periodic of "subsystem" 
+    Dont't forget to place the name of that subsystem otherwise it won't work for that particular class.
     of a subsystem, just place this into subsystem int
     //runs in the loop
     PeriodicScheduler.runPeriodically();//updates periodic class
+
     
     to add periodic function to specific class add this extends Periodic
     in the contructor add super(1000, 0);  // Run every 1000ms (1 second), no offset
