@@ -21,8 +21,8 @@ public final class Constants {
         //Arm Motor
         public static final String Arm = "arm";
         public static final int Arm_pidMode = 1; //positional
-        public static final double Arm_pidCycle = 40;
-        public static final double kp = 0.004;
+        public static final double Arm_pidCycle = 35;
+        public static final double kp = 0.003;
         public static final double kd = 0;
 
         //THE REST OF NON DRIVE TRAIN RELATED MOTORS ARE PLACED BELLOW
@@ -51,9 +51,9 @@ public final class Constants {
         public static int time = 10; //update loop for driveTrain
 
         //PID gains
-        public static double Kp = 0.018;
-        public static double Ki = 0.02;
-        public static double Kd = 0;
+        public static double Kp = 0.015;
+        public static double Ki = 0;
+        public static double Kd = 0.01;
         public static double KiClamp = 0;
         public static double KOutClamp = 1;
 

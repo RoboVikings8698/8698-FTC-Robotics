@@ -68,7 +68,10 @@ public class Commanding {
         //roll in the intake
         if (GamePad.c1.getRB()){
             Intake.intakeSpecimen();
-        } else{
+        } else if(GamePad.c1.getB()){
+            Intake.releaseSpecimen();
+        }
+        else{
             Intake.roller_hold();
         }
 
@@ -77,8 +80,7 @@ public class Commanding {
         if (GamePad.c1.getA()){
             Intake.setToIntake();
             Arm.pickup();
-
-            driveTrain.FieldOrientDrive(GamePad.c1.getDriveJoy(), true, 270);
+            driveTrain.FieldOrientDrive(GamePad.c1.getDriveJoy(), false, 0);
 
         }
         //score high box
