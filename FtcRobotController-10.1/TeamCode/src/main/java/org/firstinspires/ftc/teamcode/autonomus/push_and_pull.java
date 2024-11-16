@@ -15,6 +15,7 @@ public class push_and_pull extends OpMode{
 
     private DriveTrain driveTrain;
     private double time;
+    private double timeOffset;
     private double old_time;
     private double deltaTime;
 
@@ -32,9 +33,15 @@ public class push_and_pull extends OpMode{
     }
 
     @Override
+    public void start(){
+        timeOffset = getRuntime();
+
+    }
+
+    @Override
     public void loop() {
         PeriodicScheduler.runPeriodically();
-        time = getRuntime();
+        time = getRuntime()-timeOffset;
 
 
         if (time < 1.6 ) {

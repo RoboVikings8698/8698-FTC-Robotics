@@ -24,7 +24,11 @@ public class Dashboard {
         public static double pKd = 0;
         public static double vKp = 0;
         public static double vKd = 0;
+    }
 
+    @Config
+    public static class Commands{
+        public static double YawIntakePos = 0;
     }
 
 

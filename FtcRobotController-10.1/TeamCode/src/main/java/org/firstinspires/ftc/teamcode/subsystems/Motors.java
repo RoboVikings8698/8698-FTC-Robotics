@@ -102,6 +102,10 @@ public class Motors extends Periodic {
     //set raw power directly -1 to 1
     public void set(double RawPower){m_motor.set(RawPower);}
 
+    public void encoderReset(){
+        encoderReset();
+    }
+
     //get motorPosition, requires encoder
     public int getPosition(){return encoder.getPosition();}
 
@@ -132,9 +136,9 @@ public class Motors extends Periodic {
     }
 
     //tune motion controller
-    public void tuneMotionController(double kp,double kd){
-        pid_p.tunePID(kp, 0, kd);
-        pid_v.tunePID(kp, 0, kd);
+    public void tuneMotionController(double kp,double ki,double kd){
+        pid_p.tunePID(kp, ki, kd);
+        pid_v.tunePID(kp, ki, kd);
     }
 
     //set control method
@@ -171,7 +175,6 @@ public class Motors extends Periodic {
 
        }
     }
-
 
 
 }

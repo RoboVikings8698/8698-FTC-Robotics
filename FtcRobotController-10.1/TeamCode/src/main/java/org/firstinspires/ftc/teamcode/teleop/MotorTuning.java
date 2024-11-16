@@ -32,7 +32,7 @@ public class MotorTuning extends OpMode {
 
 
         testMotor = new Motors(hardwareMap, Constants.Motors.m_test, Constants.Motors.m_test_cycleRate, 0, 0,0, 0, 1, 0, Constants.Motors.MotorB5202312crp,Constants.Motors.MotorB5202312rpm);
-        testMotor.CoastMode();
+        //testMotor.CoastMode();
 
 
         //periodic to run PIC controllers (always place on the bottom)
@@ -45,7 +45,7 @@ public class MotorTuning extends OpMode {
         PeriodicScheduler.runPeriodically();
 
         testMotor.setControlMethod(Dashboard.MotorTuning.ControlMethod);
-        testMotor.tuneMotionController(Dashboard.MotorTuning.kp,Dashboard.MotorTuning.kd);
+        testMotor.tuneMotionController(Dashboard.MotorTuning.kp,0,Dashboard.MotorTuning.kd);
         testMotor.setPoint(Dashboard.MotorTuning.SetPoint);
 
         dashboardTelemetry.addData("motorPosition", testMotor.getPosition());
