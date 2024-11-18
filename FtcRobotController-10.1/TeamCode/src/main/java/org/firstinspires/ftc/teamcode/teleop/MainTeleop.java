@@ -33,7 +33,6 @@ public class MainTeleop extends OpMode {
     //Loop until start pressed
     @Override
     public void init_loop() {
-        command.Home();
     }
 
     //When start pressed...
@@ -55,8 +54,6 @@ public class MainTeleop extends OpMode {
         PeriodicScheduler.runPeriodically();
         //runs all of the subsystems and commands
         command.CommandingRun();
-
-       command.CheckUserInput();
 
     }
 

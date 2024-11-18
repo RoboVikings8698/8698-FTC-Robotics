@@ -19,7 +19,7 @@ public final class Constants {
 
 
         //Arm Motor
-        public static final String Arm = "arm";
+        public static final String Lift = "motorLift";
         public static final int Arm_pidMode = 1; //positional
         public static final double Arm_pidCycle = 35;
         public static final double kp = 0.003;
