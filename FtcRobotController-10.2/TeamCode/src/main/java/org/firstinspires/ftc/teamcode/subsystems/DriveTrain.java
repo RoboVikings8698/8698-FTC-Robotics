@@ -155,8 +155,8 @@ public class DriveTrain  extends Periodic {
         //double yawComp = 0;
 
         //getting joystick magnitude
-        double LSMagnitude = Functions.VectorMagnitude(LSvy, LSvx); //find magnitude of the vector
-        double RSMagnitude = Functions.VectorMagnitude(RSvy,RSvx); //find magnitude of the vector
+        double LSMagnitude = Functions.VectorMagnitude(LSvy, LSvx)*0.5; //find magnitude of the vector
+        double RSMagnitude = Functions.VectorMagnitude(RSvy,RSvx)*0.5; //find magnitude of the vector
 
         //getting bearing degree from controllers
         double LSAngle = Constants.Controllers.FTCjoystick360LEFT(Constants.Controllers.getJoyStickAngleDegree(LSvx,LSvy)); //Calculating angle from vector and converting to 360 bearing

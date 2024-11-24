@@ -46,8 +46,7 @@ public class Commanding {
 
 
     public void CommandingRun(){
-
-
+        CheckUserInput(); //checks for user control inputs
 
     }
 
@@ -68,32 +67,26 @@ public class Commanding {
         //roll in the intake
         if (GamePad.c1.getRB()){
             Intake.intakeSpecimen();
-        } else if(GamePad.c1.getB()){
-            Intake.releaseSpecimen();
-        }
-        else{
-            Intake.roller_hold();
-        }
-
-
-        //intake mode
-        if (GamePad.c1.getA()){
             Intake.setToIntake();
             Arm.pickup();
             driveTrain.FieldOrientDrive(GamePad.c1.getDriveJoy(), false, 0);
+        } else if(GamePad.c1.getB()){
+            Intake.setToIntake();
+            Intake.releaseSpecimen();
+        }
+        else if (GamePad.c1.getY()){
+            Arm.scoreLLB();
+            driveTrain.FieldOrientDrive(GamePad.c1.getDriveJoy(), true, 135);
 
         }
-        //score high box
-        else if(GamePad.c1.getY()){
-            Arm.scoreLLB();
-            Intake.setToScoreLLB();
-            driveTrain.FieldOrientDrive(GamePad.c1.getDriveJoy(), true, 135);
-        }
         else if(GamePad.c1.getX()){
-            Arm.scoreSpecimenLL();
+            Arm.scoreSpecimenHL();
             Intake.setToSpecimenScore();
+            driveTrain.FieldOrientDrive(GamePad.c1.getDriveJoy(), true, 0);
         }
-        else {
+        else{
+            Arm.modeChange();
+            Intake.roller_hold();
             traveling();
         }
 
@@ -103,8 +96,7 @@ public class Commanding {
     }
 
     public void traveling(){
-        Arm.modeChange();
-        Intake.setToSpecimenScore();
+
         driveTrain.FieldOrientDrive(GamePad.c1.getDriveJoy(), false, 0);
     }
 

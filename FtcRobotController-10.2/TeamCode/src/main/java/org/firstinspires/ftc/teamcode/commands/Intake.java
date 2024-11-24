@@ -23,7 +23,7 @@ public class Intake {
     }
 
     public void roller_hold(){
-        cServo.set(-0.1);
+        cServo.set(-0.01);
         //releaseSpecimen();
     }
 

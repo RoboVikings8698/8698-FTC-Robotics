@@ -26,7 +26,7 @@ public class Arm {
     }
 
     public void scoreLLB(){
-        Arm.setPoint(2100);
+        Arm.setPoint(2150);
     }
 
     //this is for save mode change since we do not want to get stuck to carpet while rotating the intake mech
@@ -39,6 +39,6 @@ public class Arm {
     }
 
     public void scoreSpecimenHL(){
-        Arm.setPoint(2000);
+        Arm.setPoint(2100);
     }
 }

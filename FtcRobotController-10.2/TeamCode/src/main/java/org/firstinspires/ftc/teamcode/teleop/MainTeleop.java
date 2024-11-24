@@ -56,7 +56,6 @@ public class MainTeleop extends OpMode {
         //runs all of the subsystems and commands
         command.CommandingRun();
 
-       command.CheckUserInput();
 
     }
 
