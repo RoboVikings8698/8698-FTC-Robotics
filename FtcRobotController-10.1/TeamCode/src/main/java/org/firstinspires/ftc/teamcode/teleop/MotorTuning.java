@@ -31,7 +31,7 @@ public class MotorTuning extends OpMode {
     public void init() {
 
 
-        testMotor = new Motors(hardwareMap, Constants.Motors.m_test, Constants.Motors.m_test_cycleRate, 0, 0,0, 0, 1, 0, Constants.Motors.MotorB5202312crp,Constants.Motors.MotorB5202312rpm);
+        testMotor = new Motors(hardwareMap, Constants.Motors.Winch, 1, 0, 0,0, 0, 1, 0, Constants.Motors.MotorB5202312crp,Constants.Motors.MotorB5202312rpm);
         //testMotor.CoastMode();
 
 

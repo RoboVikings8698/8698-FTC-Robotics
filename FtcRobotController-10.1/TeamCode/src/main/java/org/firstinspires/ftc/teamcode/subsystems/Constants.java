@@ -18,20 +18,16 @@ public final class Constants {
 
 
 
-        //Arm Motor
-        public static final String Lift = "motorLift";
-        public static final int Arm_pidMode = 1; //positional
-        public static final double Arm_pidCycle = 35;
-        public static final double kp = 0.003;
-        public static final double kd = 0;
+        //lift motor
+        public static final String Lift = "lift";
+
 
         //THE REST OF NON DRIVE TRAIN RELATED MOTORS ARE PLACED BELLOW
         //EXAMPLE FOR EACH MOTOR
 
 
-        //Motor Tuning
-        public static final String m_test = "arm2"; //SPECIFY MOTOR LOCATION From drive hub
-        public static double m_test_cycleRate = 40; //update time pid
+        //Motor winch
+        public static final String Winch = "winch"; //SPECIFY MOTOR LOCATION From drive hub
 
 
 

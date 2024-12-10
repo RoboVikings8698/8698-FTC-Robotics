@@ -75,7 +75,7 @@ public class DriveTrain  extends Periodic {
         //mounting configuration
         double xRotation = 0;  // enter the desired X rotation angle here.
         double yRotation = 0;  // enter the desired Y rotation angle here.
-        double zRotation = 0;  // enter the desired Z rotation angle here.
+        double zRotation = 90;  // enter the desired Z rotation angle here.
         Orientation hubRotation = xyzOrientation(xRotation, yRotation, zRotation);
 
         // Now initialize the IMU with this mounting orientation
