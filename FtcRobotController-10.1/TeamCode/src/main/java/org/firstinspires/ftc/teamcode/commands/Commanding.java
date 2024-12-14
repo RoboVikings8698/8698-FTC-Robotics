@@ -17,8 +17,13 @@ import org.firstinspires.ftc.teamcode.subsystems.myServo;
 public class Commanding {
 
     private DriveTrain driveTrain;
-    private Motors lift;
-    private Motors winch;
+    private Motors arm1;
+    private Motors winch1;
+    private Claw claw;
+    private Arm arm;
+    private Winch winch;
+    private myServo servo;
+
 
 
 
@@ -27,13 +32,20 @@ public class Commanding {
 
         //object initialization
         driveTrain = new DriveTrain(hardwareMap, Constants.DriveTrain.time);  // Don't redeclare with 'DriveTrain' keyword;
+        servo = new myServo(hardwareMap, "claw", 0, 360);
         new GamePad(controller1,controller2); //setup controllers
-        lift = new Motors(hardwareMap,Constants.Motors.Lift,Constants.Motors.MotorB5202312crp, Constants.Motors.MotorB5202312rpm);
-        winch = new Motors(hardwareMap,Constants.Motors.Winch,Constants.Motors.MotorB5202312crp, Constants.Motors.MotorB5202312rpm);
-        lift.BreakMode();
-        winch.BreakMode();
+        winch1 = new Motors(hardwareMap,Constants.Motors.winch, 1, -0.01, 0,0, 0, 1, 1, Constants.Motors.MotorB5202312crp, Constants.Motors.MotorB5202312rpm);
+        arm1 = new Motors(hardwareMap,Constants.Motors.arm, 1, 0.03, 0,0.03, 0, 1, 1, Constants.Motors.MotorB5202312crp, Constants.Motors.MotorB5202312rpm);
+
+
+        claw = new Claw(servo);
+        arm = new Arm(arm1);
+        winch = new Winch(winch1);
+
 
         PeriodicScheduler.register(driveTrain); //sets periodic for drivetrain
+        PeriodicScheduler.register(arm1);
+        PeriodicScheduler.register(winch1);
     }
 
 
@@ -46,30 +58,31 @@ public class Commanding {
 
 
     public void CheckUserInput(){
-        //reset gyro to zero
+
+
         if (GamePad.c1.getLB()){
             driveTrain.resetYaw();
-        } else if(GamePad.c1.getY()){
-            traveling();
-            lift.set(1);
-
-        } else if(GamePad.c1.getA()) {
-            traveling();
-            lift.set(-1);
-
-        } else if(GamePad.c1.getB()) {
-            traveling();
-            winch.set(-1);
-
-        } else if(GamePad.c1.getX()) {
-            traveling();
-            winch.set(1);
-
-        }else{
-            traveling();
-            winch.set(0);
-            lift.set(0);
         }
+
+        if (GamePad.c1.getRB()){
+            claw.intakeSpecimen();
+        }else{
+            claw.releaseSpecimen();
+        }
+
+        if(GamePad.c1.getY())
+        {
+            arm.LLS();
+            winch.pickup();
+        }
+
+        if(GamePad.c1.getA()){
+            arm.pickup();
+            winch.pickup();
+        }
+
+
+        traveling();
 
     }
 

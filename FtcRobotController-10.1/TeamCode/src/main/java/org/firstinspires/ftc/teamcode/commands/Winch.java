@@ -1,32 +1,31 @@
 package org.firstinspires.ftc.teamcode.commands;
 
-
 import org.firstinspires.ftc.teamcode.subsystems.Motors;
 
-public class Arm {
+public class Winch {
 
-    private Motors Arm;
+    private Motors Winch;
 
 
-    public Arm(Motors arm){
-        Arm = arm;
-        Arm.BreakMode();
+    public Winch(Motors winch){
+        Winch = winch;
+        Winch.BreakMode();
     }
 
     public void home(){
-        Arm.setPoint(0);
+        Winch.setPoint(0);
     }
 
     public void pickup(){
-        Arm.setPoint(110);
+        Winch.setPoint(300);
     }
 
     public void LLS(){
-        Arm.setPoint(20);
+        Winch.setPoint(2000);
 
     }
 
     public void armAngleReset(){
-        Arm.encoderReset();
+        Winch.encoderReset();
     }
 }

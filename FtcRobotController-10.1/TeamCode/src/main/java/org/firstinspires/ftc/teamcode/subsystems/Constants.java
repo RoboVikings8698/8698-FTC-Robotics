@@ -18,25 +18,20 @@ public final class Constants {
 
 
 
-        //lift motor
-        public static final String Lift = "lift";
-
-
         //THE REST OF NON DRIVE TRAIN RELATED MOTORS ARE PLACED BELLOW
         //EXAMPLE FOR EACH MOTOR
 
 
         //Motor winch
-        public static final String Winch = "winch"; //SPECIFY MOTOR LOCATION From drive hub
+        public static final String arm = "arm"; //SPECIFY MOTOR LOCATION From drive hub
+        public static final String winch = "winch"; //SPECIFY MOTOR LOCATION From drive hub
 
 
 
     }
 
     public static final class Servos{
-
-        public static final String cServo1 = "intake";
-        public static final String Servo1 = "yawIntake";
+        public static final String Servo1 = "claw";
     }
 
 

@@ -20,7 +20,6 @@ public class MotorTuning extends OpMode {
 
     //motor test
     private Motors testMotor;
-    private String moto_name;
 
     //Dashboard
     FtcDashboard dashboard = FtcDashboard.getInstance();  //declaration dashboard
@@ -31,11 +30,11 @@ public class MotorTuning extends OpMode {
     public void init() {
 
 
-        testMotor = new Motors(hardwareMap, Constants.Motors.Winch, 1, 0, 0,0, 0, 1, 0, Constants.Motors.MotorB5202312crp,Constants.Motors.MotorB5202312rpm);
-        //testMotor.CoastMode();
+        testMotor = new Motors(hardwareMap, Constants.Motors.winch, 1, 0, 0,0, 0, 1, 0, Constants.Motors.MotorB5202312crp,Constants.Motors.MotorB5202312rpm);
+        //testMotor.BreakMode();
 
 
-        //periodic to run PIC controllers (always place on the bottom)
+        //periodic to run PID controllers (always place on the bottom)
         PeriodicScheduler.register(testMotor);
     }
 

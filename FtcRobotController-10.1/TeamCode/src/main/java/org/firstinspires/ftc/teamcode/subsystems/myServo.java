@@ -15,4 +15,8 @@ public class myServo {
     public void setToPos(double pos){
         servo.turnToAngle(pos);
     }
+
+    public void setRotate(double rotations){
+        servo.rotateBy(rotations);
+    }
 }
