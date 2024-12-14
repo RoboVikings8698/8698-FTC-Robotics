@@ -19,4 +19,10 @@ public class myServo {
     public void setToPos(double pos){
         servo.turnToAngle(pos);
     }
+
+
+    public void byAngle(double angle){
+        servo.rotateByAngle(angle);
+
+    }
 }

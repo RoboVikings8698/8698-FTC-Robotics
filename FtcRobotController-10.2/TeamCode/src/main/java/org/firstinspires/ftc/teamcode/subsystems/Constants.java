@@ -39,8 +39,8 @@ public final class Constants {
 
     public static final class Servos{
 
-        public static final String cServo1 = "intake";
-        public static final String Servo1 = "yawIntake";
+        public static final String cServo1 = "claw";
+        public static final String Servo1 = "arm";
     }
 
 

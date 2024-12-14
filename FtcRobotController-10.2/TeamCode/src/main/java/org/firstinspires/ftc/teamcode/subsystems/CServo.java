@@ -20,8 +20,11 @@ public class CServo {
         servo.set(output);
     }
 
+
+
     //disable power to motor
     public void disable(){
-        servo.disable();
+        servo.stopMotor();
+
     }
 }

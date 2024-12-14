@@ -33,7 +33,6 @@ public class MainTeleop extends OpMode {
     //Loop until start pressed
     @Override
     public void init_loop() {
-        command.Home();
     }
 
     //When start pressed...
