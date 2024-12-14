@@ -4,6 +4,7 @@ import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gam
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad2;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.subsystems.CServo;
 import org.firstinspires.ftc.teamcode.subsystems.Constants;
@@ -16,8 +17,8 @@ import org.firstinspires.ftc.teamcode.subsystems.myServo;
 public class Commanding {
 
     private DriveTrain driveTrain;
-    private CServo servo1;
-    private myServo servo2;
+    private myServo servo1;
+    private CServo servo2;
 
     //commands
     private Claw claw;
@@ -28,14 +29,14 @@ public class Commanding {
 
         //object initialization
         driveTrain = new DriveTrain(hardwareMap, Constants.DriveTrain.time);  // Don't redeclare with 'DriveTrain' keyword
-        servo1 = new CServo(hardwareMap, Constants.Servos.cServo1);
-        servo2 = new myServo(hardwareMap,Constants.Servos.Servo1, 0, 360);
+        servo1 = new myServo(hardwareMap, Constants.Servos.cServo1, 0,360);
+        servo2 = new CServo(hardwareMap,Constants.Servos.Servo1);
 
         new GamePad(controller1,controller2); //setup controllers
 
         //command initialization
-        claw = new Claw(servo2);
-        arm = new Arm(servo1);
+        claw = new Claw(servo1);
+        arm = new Arm(servo2);
 
 
         //runs drive train periodically
@@ -55,16 +56,23 @@ public class Commanding {
 
         //intake
         if (GamePad.c1.getRB()) {
-            arm.pickup();
             claw.intakeSpecimen();
         }else{
             claw.releaseSpecimen();
         }
 
+        if(GamePad.c2.getY()){
+            arm.secLevelSpecimen();
+        }else if (GamePad.c2.getA()){
+            arm.pickup();
+        }else {
+            arm.hold();
+        }
+
+
 
         if(GamePad.c1.getX()){
-            arm.secLevelSpecimen();
-            driveTrain.FieldOrientDrive(GamePad.c1.getDriveJoy(), true, 0);
+            driveTrain.FieldOrientDrive(GamePad.c1.getDriveJoy(), false, 0);
         }
         else{
             driveTrain.FieldOrientDrive(GamePad.c1.getDriveJoy(), false, 0);

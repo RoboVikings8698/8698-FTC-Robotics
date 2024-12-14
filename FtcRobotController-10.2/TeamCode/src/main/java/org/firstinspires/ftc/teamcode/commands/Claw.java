@@ -16,11 +16,12 @@ public class Claw {
 
 
     public void intakeSpecimen(){
-        Servo.setToPos(90);
+        Servo.setToPos(330);
     }
 
     public void releaseSpecimen(){
-        Servo.setToPos(0);
+        Servo.setToPos(20);
+
     }
 
 }

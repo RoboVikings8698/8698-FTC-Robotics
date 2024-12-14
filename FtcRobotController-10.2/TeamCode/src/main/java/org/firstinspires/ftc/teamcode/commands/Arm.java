@@ -1,8 +1,11 @@
 package org.firstinspires.ftc.teamcode.commands;
 
 
+import com.qualcomm.robotcore.hardware.Servo;
+
 import org.firstinspires.ftc.teamcode.subsystems.CServo;
 import org.firstinspires.ftc.teamcode.subsystems.Motors;
+import org.firstinspires.ftc.teamcode.subsystems.myServo;
 
 public class Arm {
 
@@ -19,10 +22,17 @@ public class Arm {
     }
 
     public void secLevelSpecimen(){
-
+        Arm.set(0.5);
+        //Arm.setToPos();
     }
 
     public void pickup(){
+        Arm.set(-0.5);
 
+    }
+
+    public void hold()
+    {
+        Arm.disable();
     }
 }
