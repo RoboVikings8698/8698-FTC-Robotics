@@ -16,45 +16,34 @@ import org.firstinspires.ftc.teamcode.subsystems.myServo;
 public class Commanding {
 
     private DriveTrain driveTrain;
-    private CServo intake;
-    private myServo yawIntake;
-    private Motors arm;
-
+    private CServo servo1;
+    private myServo servo2;
 
     //commands
-    private Intake Intake;
-    private Arm Arm;
+    private Claw claw;
+    private Arm arm;
 
     //initialise commands
     public Commanding(HardwareMap hardwareMap, PeriodicScheduler scheduler, com.qualcomm.robotcore.hardware.Gamepad controller1, com.qualcomm.robotcore.hardware.Gamepad controller2){
 
         //object initialization
         driveTrain = new DriveTrain(hardwareMap, Constants.DriveTrain.time);  // Don't redeclare with 'DriveTrain' keyword
-        intake = new CServo(hardwareMap, Constants.Servos.cServo1);
-        yawIntake = new myServo(hardwareMap,Constants.Servos.Servo1, 0, 360);
+        servo1 = new CServo(hardwareMap, Constants.Servos.cServo1);
+        servo2 = new myServo(hardwareMap,Constants.Servos.Servo1, 0, 360);
+
         new GamePad(controller1,controller2); //setup controllers
-        arm = new Motors(hardwareMap, Constants.Motors.Arm, Constants.Motors.Arm_pidCycle, Constants.Motors.kp, 0, Constants.Motors.kd, 0, 1, Constants.Motors.Arm_pidMode, Constants.Motors.MotorB5202312crp, Constants.Motors.MotorB5202312rpm);
 
         //command initialization
-        Intake = new Intake(yawIntake,intake);
-        Arm = new Arm(arm);
+        claw = new Claw(servo2);
+        arm = new Arm(servo1);
 
 
+        //runs drive train periodically
         PeriodicScheduler.register(driveTrain); //sets periodic for drivetrain
-        PeriodicScheduler.register(arm); //sets periodic for the arm
     }
-
 
     public void CommandingRun(){
         CheckUserInput(); //checks for user control inputs
-
-    }
-
-    //home everything
-    public void Home(){
-        Arm.modeChange();
-        Intake.setToHome();
-        Arm.home();
     }
 
 
@@ -64,44 +53,23 @@ public class Commanding {
             driveTrain.resetYaw();
         }
 
-        //roll in the intake
-        if (GamePad.c1.getRB()){
-            Intake.intakeSpecimen();
-            Intake.setToIntake();
-            Arm.pickup();
-            driveTrain.FieldOrientDrive(GamePad.c1.getDriveJoy(), false, 0);
-        } else if(GamePad.c1.getB()){
-            Intake.setToIntake();
-            Intake.releaseSpecimen();
+        //intake
+        if (GamePad.c1.getRB()) {
+            arm.pickup();
+            claw.intakeSpecimen();
+        }else{
+            claw.releaseSpecimen();
         }
-        else if (GamePad.c1.getY()){
-            Arm.scoreLLB();
-            driveTrain.FieldOrientDrive(GamePad.c1.getDriveJoy(), true, 135);
 
-        }
-        else if(GamePad.c1.getX()){
-            Arm.scoreSpecimenHL();
-            Intake.setToSpecimenScore();
+
+        if(GamePad.c1.getX()){
+            arm.secLevelSpecimen();
             driveTrain.FieldOrientDrive(GamePad.c1.getDriveJoy(), true, 0);
         }
         else{
-            Arm.modeChange();
-            Intake.roller_hold();
-            traveling();
+            driveTrain.FieldOrientDrive(GamePad.c1.getDriveJoy(), false, 0);
+
         }
-
-
-
-
     }
-
-    public void traveling(){
-
-        driveTrain.FieldOrientDrive(GamePad.c1.getDriveJoy(), false, 0);
-    }
-
-
-
-
 
 }
