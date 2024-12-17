@@ -86,7 +86,9 @@ public class CubicSplineInterpolator {
         ArrayList<Point> interpolatedPoints = new ArrayList<>();
 
         for (int i = 0; i < n; i++) {
-            for (double t = x[i]; t < x[i + 1]; t += resolution) {  // Notice the < condition here
+
+            for (double t = x[i]; t <= x[i + 1]; t += resolution) {
+                if (t > x[i + 1]) t = x[i + 1];  // Ensure precision at the endpoint
                 double delta = t - x[i];
                 double interpolatedX = t;
                 double interpolatedY = a[i] + b[i] * delta + c[i] * delta * delta + d[i] * delta * delta * delta;
@@ -97,6 +99,7 @@ public class CubicSplineInterpolator {
 
         // Manually add the last control point
         interpolatedPoints.add(new Point(x[n], a[n], 0));  // Add the last point
+
 
         return interpolatedPoints;
     }
