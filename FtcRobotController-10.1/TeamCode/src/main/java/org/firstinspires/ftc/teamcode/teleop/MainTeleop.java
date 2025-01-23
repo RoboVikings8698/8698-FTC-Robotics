@@ -2,66 +2,42 @@ package org.firstinspires.ftc.teamcode.teleop;
 
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.Commanding;
+import org.firstinspires.ftc.teamcode.commands.DriveRobot;
 import org.firstinspires.ftc.teamcode.subsystems.GamePad;
 import org.firstinspires.ftc.teamcode.subsystems.SubsystemCore.PeriodicScheduler;
+import org.firstinspires.ftc.teamcode.teleop.Subsystem.DriveTrain;
+import org.firstinspires.ftc.teamcode.teleop.Subsystem.Lift;
+import org.firstinspires.ftc.teamcode.teleop.Subsystem.Motors;
 
 
 //Main code
 @TeleOp
-public class MainTeleop extends OpMode {
+public class MainTeleop extends CommandOpMode {
 
-    //DashBoard
+
+    //Dashboard
     FtcDashboard dashboard = FtcDashboard.getInstance();  //declaration dashboard
     Telemetry dashboardTelemetry = dashboard.getTelemetry(); //declaration dashboard
+    DriveTrain driveTrain;
 
-    private Commanding command;
-
-
-
-    //When Int pressed...
     @Override
-    public void init() {
-        PeriodicScheduler scheduler = new PeriodicScheduler();//creates periodic scheduler object
-        command = new Commanding(hardwareMap, scheduler, gamepad1, gamepad2); //pass important objects to Commanding class
-    }
+    public void initialize() {
 
-    //Loop until start pressed
-    @Override
-    public void init_loop() {
-    }
+        driveTrain = new DriveTrain(hardwareMap);
+        GamepadEx driverGamepad = new GamepadEx(gamepad1);
 
-    //When start pressed...
-    @Override
-    public void start() {
+        DriveRobot DriveRobot = new DriveRobot(driveTrain, driverGamepad);
 
-
-
+        driveTrain.setDefaultCommand(DriveRobot);
 
     }
-
-
-
-    //While robot code is not stopped...
-    @Override
-    public void loop() {
-
-        //periodic
-        PeriodicScheduler.runPeriodically();
-        //runs all of the subsystems and commands
-        command.CommandingRun();
-
-    }
-
-    //Once robot stopped...
-    @Override
-    public void stop() {
-    }
-
 }
 
 
