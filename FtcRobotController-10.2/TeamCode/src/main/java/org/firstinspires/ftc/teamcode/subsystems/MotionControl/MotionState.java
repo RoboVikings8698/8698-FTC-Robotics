@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems.MotionControl;
 
-public class MotionState {
+public class  vMotionState {
 
     private double x;
     private double y;
