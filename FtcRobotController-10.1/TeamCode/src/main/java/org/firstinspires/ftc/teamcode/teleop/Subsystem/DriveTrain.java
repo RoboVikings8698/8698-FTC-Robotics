@@ -161,7 +161,7 @@ public class DriveTrain  extends SubsystemBase {
 
         //getting bearing degree from controllers
         double LSAngle = Constants.Controllers.FTCjoystick360LEFT(Constants.Controllers.getJoyStickAngleDegree(LSvx,LSvy)); //Calculating angle from vector and converting to 360 bearing
-        RSAngle = Constants.Controllers.FTCjoystick360RIGHT(Constants.Controllers.getJoyStickAngleDegree(RSvx,RSvy)); //Calculating angle from vector and converting to 360 bearing
+        RSAngle = Constants.Controllers.FTCjoystick360RIGHT(Constants.Controllers.getJoyStickAngleDegree(-RSvx,RSvy)); //Calculating angle from vector and converting to 360 bearing
 
 
        //this code disables driver yaw input if yaw override is off, also serves as initial yaw stabilized to prevent
@@ -244,7 +244,7 @@ public class DriveTrain  extends SubsystemBase {
     public void periodic() {
         //calling pid every now on
         //posPID.calculatePID(getYaw()); //calculate pid, +90 added to compensate for joystick offset from bearing
-        posPID.calculatePID(getYaw());
+        posPID.calculatePID(getYaw()+180);
         dashboardTelemetry.addData("gro", getYaw());
         dashboardTelemetry.addData("pid vel", getYawVel());
         dashboardTelemetry.addData("pid out", posPID.getPidOut());

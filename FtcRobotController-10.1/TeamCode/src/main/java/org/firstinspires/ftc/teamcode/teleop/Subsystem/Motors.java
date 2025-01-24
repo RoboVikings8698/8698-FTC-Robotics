@@ -105,16 +105,12 @@ public class Motors extends SubsystemBase {
 
     @Override
     public void periodic(){
-        //dashboardTelemetry.addData("motorPosition", getPosition());
-        //dashboardTelemetry.update();
-        //pidEnable();
-        //BreakMode();
-
-        //pidTune(Dashboard.MotorTuning.kp,Dashboard.MotorTuning.ki,Dashboard.MotorTuning.kd, Dashboard.MotorTuning.kf);
-        //set(Dashboard.MotorTuning.SetPoint);
 
 
-        //m_motor.set(pidf.calculate(getPosition(),setpoint));
+    if(pidEnabled){
+        m_motor.set(pidf.calculate(getPosition(),setpoint));
+
+    }
 
     }
 
