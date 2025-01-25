@@ -23,8 +23,8 @@ public final class Constants {
 
 
         //Motor winch
-        public static final String arm = "arm"; //SPECIFY MOTOR LOCATION From drive hub
-        public static final String winch = "winch"; //SPECIFY MOTOR LOCATION From drive hub
+        public static final String lift = "lift"; //SPECIFY MOTOR LOCATION From drive hub
+
 
 
 

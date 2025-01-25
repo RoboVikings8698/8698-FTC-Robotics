@@ -1,8 +1,9 @@
-package org.firstinspires.ftc.teamcode.subsystems;
+package org.firstinspires.ftc.teamcode.teleop.Subsystem;
 
 import static com.qualcomm.hardware.rev.RevHubOrientationOnRobot.xyzOrientation;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -12,13 +13,14 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.teamcode.subsystems.Constants;
+import org.firstinspires.ftc.teamcode.subsystems.Functions;
 import org.firstinspires.ftc.teamcode.subsystems.MotionControl.MotionControllers;
 import org.firstinspires.ftc.teamcode.subsystems.SubsystemCore.Periodic;
-import org.firstinspires.ftc.teamcode.subsystems.SubsystemCore.PeriodicScheduler;
 
 import java.util.ArrayList;
 
-public class DriveTrain  extends Periodic {
+public class DriveTrain  extends SubsystemBase {
 
     //motor declaration
     private Motors motor_1, motor_2, motor_3, motor_4;
@@ -49,10 +51,9 @@ public class DriveTrain  extends Periodic {
 
 
     //Constructor, creates drivetrain, initializes variables and motor objects
-    public DriveTrain(HardwareMap hardwareMap, int time){
+    public DriveTrain(HardwareMap hardwareMap){
 
-        //set update period for periodic function
-        super(time, 5);
+
 
         //PID initialization//
         PID = new MotionControllers();
@@ -61,13 +62,13 @@ public class DriveTrain  extends Periodic {
 
 
         //motor declaration and initialization
-        motor_1 = new Motors(hardwareMap, Constants.Motors.Motor1, Constants.Motors.MotorB5202312crp, Constants.Motors.MotorB5202312rpm);
+        motor_1 = new Motors(hardwareMap, Constants.Motors.Motor1);
         motor_1.BreakMode();
-        motor_2 = new Motors(hardwareMap, Constants.Motors.Motor2, Constants.Motors.MotorB5202312crp, Constants.Motors.MotorB5202312rpm);
+        motor_2 = new Motors(hardwareMap, Constants.Motors.Motor2);
         motor_2.BreakMode();
-        motor_3 = new Motors(hardwareMap, Constants.Motors.Motor3, Constants.Motors.MotorB5202312crp, Constants.Motors.MotorB5202312rpm);
+        motor_3 = new Motors(hardwareMap, Constants.Motors.Motor3);
         motor_3.BreakMode();
-        motor_4 = new Motors(hardwareMap, Constants.Motors.Motor4, Constants.Motors.MotorB5202312crp, Constants.Motors.MotorB5202312rpm);
+        motor_4 = new Motors(hardwareMap, Constants.Motors.Motor4);
         motor_4.BreakMode();
 
         //Gyro Initialization
@@ -83,10 +84,10 @@ public class DriveTrain  extends Periodic {
         imu.initialize(new IMU.Parameters(orientationOnRobot));
 
         //setup periodic for motors, in case with want to setup velocity pid
-        PeriodicScheduler.register(motor_1);
-        PeriodicScheduler.register(motor_2);
-        PeriodicScheduler.register(motor_3);
-        PeriodicScheduler.register(motor_4);
+        //PeriodicScheduler.register(motor_1);
+        //PeriodicScheduler.register(motor_2);
+        //PeriodicScheduler.register(motor_3);
+        //PeriodicScheduler.register(motor_4);
     }
 
 
@@ -160,13 +161,14 @@ public class DriveTrain  extends Periodic {
 
         //getting bearing degree from controllers
         double LSAngle = Constants.Controllers.FTCjoystick360LEFT(Constants.Controllers.getJoyStickAngleDegree(LSvx,LSvy)); //Calculating angle from vector and converting to 360 bearing
-        RSAngle = Constants.Controllers.FTCjoystick360RIGHT(Constants.Controllers.getJoyStickAngleDegree(RSvx,RSvy)); //Calculating angle from vector and converting to 360 bearing
+        RSAngle = Constants.Controllers.FTCjoystick360RIGHT(Constants.Controllers.getJoyStickAngleDegree(-RSvx,RSvy)); //Calculating angle from vector and converting to 360 bearing
 
 
        //this code disables driver yaw input if yaw override is off, also serves as initial yaw stabilized to prevent
         //robot from jerking, since now default stating degree of joystick is in the middle is 0.
         if(YawOverride){
             posPID.setNewAngle(Yaw);//new "mission" for PID
+//            posPID.setNewAngle(180); //TEST
 
             yawComp = posPID.getPidOut();
 
@@ -242,10 +244,11 @@ public class DriveTrain  extends Periodic {
     public void periodic() {
         //calling pid every now on
         //posPID.calculatePID(getYaw()); //calculate pid, +90 added to compensate for joystick offset from bearing
-        posPID.calculatePID(getYaw());
+        posPID.calculatePID(getYaw()+180);
         dashboardTelemetry.addData("gro", getYaw());
         dashboardTelemetry.addData("pid vel", getYawVel());
         dashboardTelemetry.addData("pid out", posPID.getPidOut());
+
 
 
         dashboardTelemetry.addData("pidOUT123", yawComp);

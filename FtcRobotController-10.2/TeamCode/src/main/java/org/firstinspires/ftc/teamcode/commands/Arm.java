@@ -27,12 +27,13 @@ public class Arm {
     }
 
     public void pickup(){
-        Arm.set(-0.5);
+        Arm.set(-0.2);
 
     }
 
     public void hold()
     {
+
         Arm.disable();
     }
 }

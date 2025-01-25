@@ -13,7 +13,9 @@ public class Dashboard {
         //0-direct, 1-position, 2-velocity, 3-cascade
         public static int ControlMethod = 0;
         public static double kp = 0;
+        public static double ki = 0;
         public static double kd = 0;
+        public static double kf = 0;
     }
 
     @Config
