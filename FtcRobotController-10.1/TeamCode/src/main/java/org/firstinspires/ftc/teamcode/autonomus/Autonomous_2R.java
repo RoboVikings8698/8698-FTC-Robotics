@@ -9,8 +9,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.subsystems.Constants;
-import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
 import org.firstinspires.ftc.teamcode.subsystems.SubsystemCore.PeriodicScheduler;
+import org.firstinspires.ftc.teamcode.teleop.Subsystem.DriveTrain;
 
 import java.util.jar.Attributes;
 
@@ -28,10 +28,9 @@ public class Autonomous_2R extends OpMode {
     @Override
     public void init()
     {
-        PeriodicScheduler scheduler = new PeriodicScheduler();
-        driveTrain = new DriveTrain(hardwareMap, Constants.DriveTrain.time);
+
+        driveTrain = new DriveTrain(hardwareMap);
         driveTrain.resetYaw();
-        PeriodicScheduler.register(driveTrain);
 
 //        dsensor = hardwareMap.get(DistanceSensor.class, "distance_sensor");
 
@@ -74,7 +73,6 @@ public class Autonomous_2R extends OpMode {
 //        System.out.println("dsensor value: " + testDistance);
 
 
-        PeriodicScheduler.runPeriodically();
     }
 
     public void periodic() {

@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.subsystems.Constants;
-import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
 import org.firstinspires.ftc.teamcode.subsystems.SubsystemCore.PeriodicScheduler;
+import org.firstinspires.ftc.teamcode.teleop.Subsystem.DriveTrain;
 
 @Autonomous
 public class Autonomous_2L extends OpMode {
@@ -18,10 +18,8 @@ public class Autonomous_2L extends OpMode {
 
     @Override
     public void init() {
-        PeriodicScheduler scheduler = new PeriodicScheduler();
-        driveTrain = new DriveTrain(hardwareMap, Constants.DriveTrain.time);
+        driveTrain = new DriveTrain(hardwareMap);
         driveTrain.resetYaw();
-        PeriodicScheduler.register(driveTrain);
     }
 
     //When start pressed...
@@ -54,6 +52,5 @@ public class Autonomous_2L extends OpMode {
         }
 
 
-        PeriodicScheduler.runPeriodically();
     }
 }
