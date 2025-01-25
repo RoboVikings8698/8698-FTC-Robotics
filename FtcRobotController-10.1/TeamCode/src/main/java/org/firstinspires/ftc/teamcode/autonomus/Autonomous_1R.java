@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.autonomus;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.subsystems.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
@@ -14,11 +16,13 @@ import java.util.jar.Attributes;
 
 @Autonomous
 public class Autonomous_1R extends OpMode {
-    DistanceSensor dsensor;
+//    DistanceSensor dsensor;
     double testDistance;
     private DriveTrain driveTrain;
     private ElapsedTime runtime = new ElapsedTime();
 
+    FtcDashboard dashboard = FtcDashboard.getInstance();  //declaration dashboard
+    Telemetry dashboardTelemetry = dashboard.getTelemetry(); //declaration dashboard
     private double timeComp = 0;
 
     @Override
@@ -29,21 +33,21 @@ public class Autonomous_1R extends OpMode {
         driveTrain.resetYaw();
         PeriodicScheduler.register(driveTrain);
 
-        dsensor = hardwareMap.get(DistanceSensor.class, "distance_sensor");
+//        dsensor = hardwareMap.get(DistanceSensor.class, "distance_sensor");
 
     }
-    public void distance()
-    {
-        double value = dsensor.getDistance(DistanceUnit.INCH);
-
-    }
+//    public double distance()
+//    {
+//        double value = dsensor.getDistance(DistanceUnit.INCH);
+//        return value;
+//    }
 
     //When start pressed...
     @Override
     public void start() {
 
         try {
-            Thread.sleep(10000);
+            Thread.sleep(0);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -60,16 +64,26 @@ public class Autonomous_1R extends OpMode {
 
 
         //Comp-bot uses 0 for YAW and Test-bot uses 270 for YAW
-        if (time >1) {
+        if (time >1.8) {
             driveTrain.FieldOrientedDriveAuto(0,0, 0);
         } else if (time >= 0){
-            driveTrain.FieldOrientedDriveAuto(0.5,0, 0);
+            driveTrain.FieldOrientedDriveAuto(0.5,270, 0);
 
         }
-        testDistance = dsensor.getDistance(DistanceUnit.INCH);
-        System.out.println("dsensor value: " + testDistance);
+//        testDistance = dsensor.getDistance(DistanceUnit.INCH);
+//        System.out.println("dsensor value: " + testDistance);
 
 
         PeriodicScheduler.runPeriodically();
+    }
+
+    public void periodic() {
+        //calling pid every now on
+        //posPID.calculatePID(getYaw()); //calculate pid, +90 added to compensate for joystick offset from bearing
+//        posPID.calculatePID(getYaw());
+//        dashboardTelemetry.addData("Distance Value", distance());
+//
+//
+//        dashboardTelemetry.update();
     }
 }

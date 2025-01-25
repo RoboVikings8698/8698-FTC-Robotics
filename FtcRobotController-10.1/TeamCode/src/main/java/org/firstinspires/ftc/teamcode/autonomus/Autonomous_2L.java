@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
 import org.firstinspires.ftc.teamcode.subsystems.SubsystemCore.PeriodicScheduler;
 
 @Autonomous
-public class Autonomous_1L extends OpMode {
+public class Autonomous_2L extends OpMode {
 
     private DriveTrain driveTrain;
     private ElapsedTime     runtime = new ElapsedTime();
@@ -46,7 +46,7 @@ public class Autonomous_1L extends OpMode {
 
         //Comp-bot uses 0 for YAW and Test-bot uses 270 for YAW
         //2.5s could be for if someone is to the right of us also parking
-        if (time >3.6) {
+        if (time >2.9) {
             driveTrain.FieldOrientedDriveAuto(0,0, 0);
         } else if (time >= 0){
             driveTrain.FieldOrientedDriveAuto(0.5,270, 0);
