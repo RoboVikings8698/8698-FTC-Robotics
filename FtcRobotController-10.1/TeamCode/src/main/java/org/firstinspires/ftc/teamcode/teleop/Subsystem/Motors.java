@@ -107,10 +107,19 @@ public class Motors extends SubsystemBase {
     public void periodic(){
 
 
-    if(pidEnabled){
-        m_motor.set(pidf.calculate(getPosition(),setpoint));
+       // dashboardTelemetry.addData("motorPosition", getPosition());
+        //dashboardTelemetry.update();
+        //pidEnable();
+       // BreakMode();
 
-    }
+       // pidTune(Dashboard.MotorTuning.kp,Dashboard.MotorTuning.ki,Dashboard.MotorTuning.kd, Dashboard.MotorTuning.kf);
+        //set(Dashboard.MotorTuning.SetPoint);
+
+        if(pidEnabled) {
+            m_motor.set(pidf.calculate(getPosition(), setpoint));
+         //   dashboardTelemetry.addData("helloorld",10000);
+           // dashboardTelemetry.update();
+        }
 
     }
 
